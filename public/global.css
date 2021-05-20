@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  /* box-sizing: border-box; */
+}
+*:focus {
+  outline: 0;
+}
+html, body, #root {
+  min-height: 100%;
+  height: 100%;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  background-color: #efefef;
+}
+body, input, button {
+  font-family: 'Montserrat', sans-serif;
+}
+a {
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  border: none;
+}
