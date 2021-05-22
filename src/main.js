@@ -6,6 +6,8 @@ import './config/msgs'
 
 Vue.config.productionTip = false
 
+Vue.filter('formattedDecimalValue',)
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')
