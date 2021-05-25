@@ -1,6 +1,7 @@
 <template>
   <div class="results">
     <h1>Resultados</h1>
+
     <div class="results-options">
       <b-button class="option-showResults" @click="showResults = !showResults"
         >{{ showResults ? "Esconder " : "Mostrar " }} resultados do
@@ -401,6 +402,11 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.close {
+  border: none;
+  background: inherit;
 }
 
 .option-selectMonth {

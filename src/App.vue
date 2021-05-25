@@ -1,14 +1,22 @@
 <template>
-  <Home />
+  <div>
+    <Header />
+    <Menu />
+    <Content />
+  </div>
 </template>
 
 <script>
-import Home from "./components/Home.vue";
+import Header from "./components/template/Header";
+import Menu from "./components/template/Menu";
+import Content from "./components/template/Content";
 
 export default {
   name: "App",
   components: {
-    Home,
+    Header,
+    Content,
+    Menu,
   },
 };
 </script>
