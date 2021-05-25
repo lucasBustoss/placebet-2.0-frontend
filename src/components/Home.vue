@@ -3,7 +3,7 @@
     <h1>Resultados</h1>
     <div class="results-options">
       <b-button class="option-showResults" @click="showResults = !showResults"
-        >{{ showResults ? "Esconder " : "Mostrar " }} resultados no
+        >{{ showResults ? "Esconder " : "Mostrar " }} resultados do
         mês</b-button
       >
 
@@ -56,7 +56,8 @@
                   align="center"
                 >
                   <b-card-text
-                    >$ {{ formattedDecimalValue(stats.startBank) }}</b-card-text
+                    >R$
+                    {{ formattedDecimalValue(stats.startBank) }}</b-card-text
                   >
                 </b-card>
                 <b-card
@@ -68,7 +69,49 @@
                   align="center"
                 >
                   <b-card-text
-                    >$ {{ formattedDecimalValue(stats.finalBank) }}</b-card-text
+                    >R$
+                    {{ formattedDecimalValue(stats.finalBank) }}</b-card-text
+                  >
+                </b-card>
+              </b-card>
+            </div>
+            <div class="results-bankroll-card">
+              <b-card
+                header="Banca (Betfair)"
+                class="card-roi"
+                border-variant="warning"
+                header-bg-variant="warning"
+                bg-variant="light"
+                align="center"
+              >
+                <b-card
+                  header="Início"
+                  class="card-bankvalue"
+                  border-variant="warning"
+                  header-bg-variant="warning"
+                  bg-variant="light"
+                  align="center"
+                >
+                  <b-card-text
+                    >R$
+                    {{
+                      formattedDecimalValue(stats.startBankBetfair)
+                    }}</b-card-text
+                  >
+                </b-card>
+                <b-card
+                  header="Atual"
+                  class="card-bankvalue"
+                  border-variant="warning"
+                  header-bg-variant="warning"
+                  bg-variant="light"
+                  align="center"
+                >
+                  <b-card-text
+                    >R$
+                    {{
+                      formattedDecimalValue(stats.finalBankBetfair)
+                    }}</b-card-text
                   >
                 </b-card>
               </b-card>
@@ -76,7 +119,7 @@
 
             <div class="results-bankroll-card">
               <b-card
-                header="Lucro"
+                header="Stake Padrão"
                 class="card-profitLoss"
                 border-variant="warning"
                 header-bg-variant="warning"
@@ -84,7 +127,28 @@
                 align="center"
               >
                 <b-card-text
-                  >$ {{ formattedDecimalValue(stats.profitLoss) }}</b-card-text
+                  ><b
+                    >R$ {{ formattedDecimalValue(stats.stake) }}</b
+                  ></b-card-text
+                >
+              </b-card>
+            </div>
+
+            <div class="results-bankroll-card">
+              <b-card
+                header="Lucro"
+                class="card-profitLoss"
+                bg-variant="light"
+                align="center"
+                header-text-variant="white"
+                :border-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
+                :header-bg-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
+                :body-text-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
+              >
+                <b-card-text
+                  ><b
+                    >R$ {{ formattedDecimalValue(stats.profitLoss) }}</b
+                  ></b-card-text
                 >
               </b-card>
             </div>
@@ -101,8 +165,8 @@
                 <b-card
                   header="Banca"
                   class="card-bankvalue"
-                  :border-variant="50 > 0 ? 'success' : 'danger'"
-                  :header-bg-variant="50 > 0 ? 'success' : 'danger'"
+                  :border-variant="stats.roiBank < 0 ? 'danger' : 'success'"
+                  :header-bg-variant="stats.roiBank < 0 ? 'danger' : 'success'"
                   header-text-variant="white"
                   bg-variant="light"
                   align="center"
@@ -114,8 +178,8 @@
                 <b-card
                   header="Stake"
                   class="card-bankvalue"
-                  :border-variant="50 > 0 ? 'success' : 'danger'"
-                  :header-bg-variant="50 > 0 ? 'success' : 'danger'"
+                  :border-variant="stats.roiStake < 0 ? 'danger' : 'success'"
+                  :header-bg-variant="stats.roiStake < 0 ? 'danger' : 'success'"
                   header-text-variant="white"
                   bg-variant="light"
                   align="center"
@@ -123,40 +187,6 @@
                   <b-card-text
                     >{{ formattedDecimalValue(stats.roiStake) }}%</b-card-text
                   >
-                </b-card>
-              </b-card>
-            </div>
-
-            <div class="results-bankroll-card">
-              <b-card
-                header="Dias"
-                class="card-roi"
-                border-variant="warning"
-                header-bg-variant="warning"
-                bg-variant="light"
-                align="center"
-              >
-                <b-card
-                  header="Green"
-                  class="card-bankvalue"
-                  border-variant="success"
-                  header-bg-variant="success"
-                  header-text-variant="white"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text>{{ stats.greenDays }}</b-card-text>
-                </b-card>
-                <b-card
-                  header="Red"
-                  class="card-bankvalue"
-                  border-variant="danger"
-                  header-bg-variant="danger"
-                  header-text-variant="white"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text>{{ stats.redDays }}</b-card-text>
                 </b-card>
               </b-card>
             </div>
@@ -272,6 +302,7 @@ export default {
       ],
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       stats: {},
+      user_id: "a2e1736d-15bb-4c21-879d-6e28cfff552d",
     };
   },
   methods: {
@@ -284,12 +315,12 @@ export default {
       try {
         const response = await api.get("/bets", {
           params: {
-            user_id: "7a5f7a02-d06f-4320-83e7-548eeb08115b",
+            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });
 
-        if (response && response !== undefined) {
+        if (response && response.data !== undefined) {
           this.bets = response.data;
         }
       } catch (err) {
@@ -300,12 +331,12 @@ export default {
       try {
         const response = await api.get("/bets/resultsPerDate", {
           params: {
-            user_id: "7a5f7a02-d06f-4320-83e7-548eeb08115b",
+            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });
 
-        if (response && response !== undefined) {
+        if (response && response.data !== undefined) {
           this.results = response.data;
         }
       } catch (err) {
@@ -316,9 +347,9 @@ export default {
       try {
         await api.get("/bets/integrate", {
           params: {
-            user_id: "7a5f7a02-d06f-4320-83e7-548eeb08115b",
-            username: "lucasbustoss",
-            password: "simsenhor.1",
+            user_id: this.user_id,
+            username: "xistzera",
+            password: "semSenha01@!",
           },
         });
         await this.loadInfos;
@@ -332,12 +363,12 @@ export default {
       try {
         const response = await api.get("/stats", {
           params: {
-            user_id: "7a5f7a02-d06f-4320-83e7-548eeb08115b",
+            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });
 
-        if (response && response !== undefined) {
+        if (response && response.data !== undefined) {
           this.stats = response.data;
         }
       } catch (err) {
