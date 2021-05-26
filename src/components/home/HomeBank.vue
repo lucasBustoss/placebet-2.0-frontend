@@ -5,27 +5,27 @@
       striped
       hover
       bordered
-      :items="resultsByMonth"
+      :items="bankStats"
       :fields="resultFields"
     >
-      <template #cell(month)="data">{{ data.item.month }}</template>
-      <template #cell(initialBank)="data"
-        >R$ {{ formattedDecimalValue(data.item.initialBank) }}</template
+      <template #cell(month)="props">{{ props.item.month }}</template>
+      <template #cell(initialBank)="props"
+        >R$ {{ formattedDecimalValue(props.item.startBank) }}</template
       >
-      <template #cell(profitLoss)="data"
-        >R$ {{ formattedDecimalValue(data.item.profitLoss) }}</template
+      <template #cell(profitLoss)="props"
+        >R$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
       >
-      <template #cell(withdraw)="data">
-        R$ {{ formattedDecimalValue(data.item.withdraw) }}</template
+      <template #cell(withdraw)="props">
+        R$ {{ formattedDecimalValue(props.item.withdraws) }}</template
       >
-      <template #cell(deposit)="data"
-        >R$ {{ formattedDecimalValue(data.item.deposit) }}%</template
+      <template #cell(deposit)="props"
+        >R$ {{ formattedDecimalValue(props.item.deposits) }}%</template
       >
-      <template #cell(finalBank)="data"
-        >R$ {{ formattedDecimalValue(data.item.finalBank) }}</template
+      <template #cell(finalBank)="props"
+        >R$ {{ formattedDecimalValue(props.item.finalBank) }}</template
       >
-      <template #cell(roi)="data"
-        >{{ formattedDecimalValue(data.item.roi) }}%</template
+      <template #cell(roi)="props"
+        >{{ formattedDecimalValue(props.item.roi) }}%</template
       >
     </b-table>
   </b-card>
@@ -33,119 +33,9 @@
 
 <script>
 export default {
-  props: ["formattedDecimalValue"],
+  props: ["bankStats", "formattedDecimalValue"],
   data() {
     return {
-      resultsByMonth: [
-        {
-          month: "Janeiro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Fevereiro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Março",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Abril",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Maio",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Junho",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Julho",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Agosto",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Setembro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Outubro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Novembro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-        {
-          month: "Dezembro",
-          initialBank: 6365.49,
-          profitLoss: 100,
-          withdraw: 0,
-          deposit: 0,
-          finalBank: 6465.49,
-          roi: 10,
-        },
-      ],
       resultFields: [
         {
           key: "month",

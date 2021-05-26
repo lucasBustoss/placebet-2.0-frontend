@@ -9,24 +9,24 @@
       striped
       hover
       bordered
-      :items="resultsByMonth"
+      :items="betfairStats"
       :fields="resultFields"
     >
-      <template #cell(month)="data">{{ data.item.month }}</template>
-      <template #cell(initialBank)="data"
-        >R$ {{ formattedDecimalValue(data.item.initialBank) }}</template
+      <template #cell(month)="props">{{ props.item.month }}</template>
+      <template #cell(initialBank)="props"
+        >R$ {{ formattedDecimalValue(props.item.startBankBetfair) }}</template
       >
-      <template #cell(profitLoss)="data"
-        >R$ {{ formattedDecimalValue(data.item.profitLoss) }}</template
+      <template #cell(profitLoss)="props"
+        >R$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
       >
-      <template #cell(withdraw)="data">
-        R$ {{ formattedDecimalValue(data.item.withdraw) }}</template
+      <template #cell(withdraw)="props">
+        R$ {{ formattedDecimalValue(props.item.withdraws) }}</template
       >
-      <template #cell(deposit)="data"
-        >R$ {{ formattedDecimalValue(data.item.deposit) }}%</template
+      <template #cell(deposit)="props"
+        >R$ {{ formattedDecimalValue(props.item.deposits) }}%</template
       >
-      <template #cell(finalBank)="data"
-        >R$ {{ formattedDecimalValue(data.item.finalBank) }}</template
+      <template #cell(finalBank)="props"
+        >R$ {{ formattedDecimalValue(props.item.finalBankBetfair) }}</template
       >
     </b-table>
   </b-card>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  props: ["formattedDecimalValue"],
+  props: ["betfairStats", "formattedDecimalValue"],
   data() {
     return {
       resultsByMonth: [
