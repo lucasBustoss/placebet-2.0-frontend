@@ -31,7 +31,7 @@
 }
 
 .b-sidebar > .b-sidebar-header {
-  padding: 20px;
+  padding: 20px !important;
 }
 
 .b-sidebar {

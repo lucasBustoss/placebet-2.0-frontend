@@ -1,13 +1,16 @@
 <template>
   <div class="results">
-    <h1>Resultados</h1>
+    <div class="results-header">
+      <h1>Resultados</h1>
+      <div class="results-header-icon">
+        <i
+          @click="showResults = !showResults"
+          :class="showResults ? 'fa fa-eye' : 'fa fa-eye-slash'"
+        ></i>
+      </div>
+    </div>
 
     <div class="results-options">
-      <b-button class="option-showResults" @click="showResults = !showResults"
-        >{{ showResults ? "Esconder " : "Mostrar " }} resultados do
-        mês</b-button
-      >
-
       <b-form-select
         class="option-selectMonth"
         size="lg"
@@ -16,277 +19,45 @@
         @change="loadInfos"
       ></b-form-select>
     </div>
+
     <b-card-group deck>
-      <b-card title="Resultados do mês" class="results-perday">
-        <transition name="fade">
-          <div v-if="showResults">
-            <b-table
-              id="result-perday-table"
-              bordered
-              small
-              hover
-              :items="results"
-              :fields="resultFields"
-              :tbody-tr-class="rowClass"
-            ></b-table>
-          </div>
-        </transition>
-        <transition name="fade">
-          <div v-show="!showResults">Escondido</div>
-        </transition>
-      </b-card>
-
-      <b-card title="Banca no mês" class="results-bankroll">
-        <transition name="fade">
-          <div v-show="showResults">
-            <div class="results-bankroll-card">
-              <b-card
-                header="Banca"
-                class="card-roi"
-                border-variant="warning"
-                header-bg-variant="warning"
-                bg-variant="light"
-                align="center"
-              >
-                <b-card
-                  header="Início"
-                  class="card-bankvalue"
-                  border-variant="warning"
-                  header-bg-variant="warning"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >R$
-                    {{ formattedDecimalValue(stats.startBank) }}</b-card-text
-                  >
-                </b-card>
-                <b-card
-                  header="Atual"
-                  class="card-bankvalue"
-                  border-variant="warning"
-                  header-bg-variant="warning"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >R$
-                    {{ formattedDecimalValue(stats.finalBank) }}</b-card-text
-                  >
-                </b-card>
-              </b-card>
-            </div>
-            <div class="results-bankroll-card">
-              <b-card
-                header="Banca (Betfair)"
-                class="card-roi"
-                border-variant="warning"
-                header-bg-variant="warning"
-                bg-variant="light"
-                align="center"
-              >
-                <b-card
-                  header="Início"
-                  class="card-bankvalue"
-                  border-variant="warning"
-                  header-bg-variant="warning"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >R$
-                    {{
-                      formattedDecimalValue(stats.startBankBetfair)
-                    }}</b-card-text
-                  >
-                </b-card>
-                <b-card
-                  header="Atual"
-                  class="card-bankvalue"
-                  border-variant="warning"
-                  header-bg-variant="warning"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >R$
-                    {{
-                      formattedDecimalValue(stats.finalBankBetfair)
-                    }}</b-card-text
-                  >
-                </b-card>
-              </b-card>
-            </div>
-
-            <div class="results-bankroll-card">
-              <b-card
-                header="Stake Padrão"
-                class="card-profitLoss"
-                border-variant="warning"
-                header-bg-variant="warning"
-                bg-variant="light"
-                align="center"
-              >
-                <b-card-text
-                  ><b
-                    >R$ {{ formattedDecimalValue(stats.stake) }}</b
-                  ></b-card-text
-                >
-              </b-card>
-            </div>
-
-            <div class="results-bankroll-card">
-              <b-card
-                header="Lucro"
-                class="card-profitLoss"
-                bg-variant="light"
-                align="center"
-                header-text-variant="white"
-                :border-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
-                :header-bg-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
-                :body-text-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
-              >
-                <b-card-text
-                  ><b
-                    >R$ {{ formattedDecimalValue(stats.profitLoss) }}</b
-                  ></b-card-text
-                >
-              </b-card>
-            </div>
-
-            <div class="results-bankroll-card">
-              <b-card
-                header="ROI"
-                class="card-roi"
-                border-variant="warning"
-                header-bg-variant="warning"
-                bg-variant="light"
-                align="center"
-              >
-                <b-card
-                  header="Banca"
-                  class="card-bankvalue"
-                  :border-variant="stats.roiBank < 0 ? 'danger' : 'success'"
-                  :header-bg-variant="stats.roiBank < 0 ? 'danger' : 'success'"
-                  header-text-variant="white"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >{{ formattedDecimalValue(stats.roiBank) }}%</b-card-text
-                  >
-                </b-card>
-                <b-card
-                  header="Stake"
-                  class="card-bankvalue"
-                  :border-variant="stats.roiStake < 0 ? 'danger' : 'success'"
-                  :header-bg-variant="stats.roiStake < 0 ? 'danger' : 'success'"
-                  header-text-variant="white"
-                  bg-variant="light"
-                  align="center"
-                >
-                  <b-card-text
-                    >{{ formattedDecimalValue(stats.roiStake) }}%</b-card-text
-                  >
-                </b-card>
-              </b-card>
-            </div>
-          </div>
-        </transition>
-
-        <transition name="fade">
-          <div v-show="!showResults">Escondido</div>
-        </transition>
-      </b-card>
-
-      <b-card title="Lista de resultados" class="results-list">
-        <div class="buttons">
-          <b-button variant="warning" @click="loadBets"
-            >Carregar novos resultados</b-button
-          >
-          <b-button variant="info" @click="getBets"
-            >Atualizar a página</b-button
-          >
-        </div>
-        <b-table
-          id="result-table"
-          striped
-          hover
-          bordered
-          :items="bets"
-          :fields="betFields"
-          :per-page="perPage"
-          :current-page="currentPage"
-        ></b-table>
-
-        <div class="pagination-buttons">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="rows"
-            :per-page="perPage"
-            aria-controls="result-table"
-          ></b-pagination>
-        </div>
-      </b-card>
+      <transition name="fade">
+        <ResultsMonth v-show="showResults" :results="results" />
+      </transition>
+      <transition name="fade">
+        <ResultsBank
+          v-show="showResults"
+          :stats="stats"
+          :formattedDecimalValue="formattedDecimalValue"
+        />
+      </transition>
+      <ResultsBetList
+        :bets="bets"
+        :showResults="showResults"
+        @loadBets="loadBets"
+        @getBets="getBets"
+      />
     </b-card-group>
   </div>
 </template>
 
 <script>
+import ResultsMonth from "./ResultsMonth";
+import ResultsBank from "./ResultsBank";
+import ResultsBetList from "./ResultsBetList";
+
 import { startOfMonth, format } from "date-fns";
 
 import { showError } from "@/global";
 import api from "@/config/api";
 
 export default {
-  computed: {
-    rows() {
-      return this.bets.length;
-    },
-  },
+  components: { ResultsMonth, ResultsBank, ResultsBetList },
   data() {
     return {
       showResults: false,
-      perPage: 20,
-      currentPage: 1,
       bets: [],
       results: [],
-      betFields: [
-        {
-          key: "date",
-          label: "Data",
-        },
-        {
-          key: "eventDescription",
-          label: "Jogo",
-        },
-        {
-          key: "method",
-          label: "Método",
-        },
-        {
-          key: "profitLoss",
-          label: "Resultado",
-        },
-        {
-          key: "roi",
-          label: "ROI (%)",
-        },
-      ],
-      resultFields: [
-        {
-          key: "date",
-          label: "Data",
-        },
-        {
-          key: "profitLossFormatted",
-          label: "Resultado (R$)",
-        },
-        {
-          key: "roiFormatted",
-          label: "ROI (%)",
-        },
-      ],
       months: [
         { value: "2021-01-01", text: "Janeiro" },
         { value: "2021-02-01", text: "Fevereiro" },
@@ -307,10 +78,10 @@ export default {
     };
   },
   methods: {
-    loadInfos() {
-      this.getBets();
-      this.getResultsByDate();
-      this.getStats();
+    async loadInfos() {
+      await this.getBets();
+      await this.getResultsByDate();
+      await this.getStats();
     },
     async getBets() {
       try {
@@ -323,6 +94,7 @@ export default {
 
         if (response && response.data !== undefined) {
           this.bets = response.data;
+          console.log(this.bets);
         }
       } catch (err) {
         showError(err);
@@ -353,7 +125,7 @@ export default {
             password: "semSenha01@!",
           },
         });
-        await this.loadInfos;
+        await this.loadInfos();
 
         this.$toasted.global.defaultSuccess();
       } catch (err) {
@@ -369,17 +141,23 @@ export default {
           },
         });
 
-        if (response && response.data !== undefined) {
+        if (response && response.data !== null) {
           this.stats = response.data;
+        } else {
+          this.stats = {
+            startBank: 0,
+            finalBank: 0,
+            startBankBetfair: 0,
+            finalBankBetfair: 0,
+            stake: 0,
+            profitLoss: 0,
+            roiBank: 0,
+            roiStake: 0,
+          };
         }
       } catch (err) {
         showError(err);
       }
-    },
-    rowClass(item, type) {
-      if (!item || type !== "row") return;
-      if (Number(item.profitLoss) > 0) return "table-success";
-      if (Number(item.profitLoss) < 0) return "table-danger";
     },
     formattedDecimalValue(value) {
       const numberValue = Number(value);
@@ -404,6 +182,17 @@ h1 {
   align-items: center;
 }
 
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.results-header-icon {
+  margin-left: 15px;
+  cursor: pointer;
+}
+
 .close {
   border: none;
   background: inherit;
@@ -422,6 +211,10 @@ h1 {
   justify-content: center;
 }
 
+.option-selectMonth {
+  padding: 10px;
+}
+
 .results-content {
   width: 100%;
   display: flex;
@@ -438,77 +231,6 @@ h1 {
   padding: 10px;
   margin: 10px;
 }
-
-.results-perday {
-  width: 20%;
-  font-size: 1.1rem;
-}
-
-#result-perday-table > thead,
-#result-perday-table > tbody {
-  text-align: center;
-}
-
-#result-perday-table > tbody {
-  font-size: 0.85rem;
-}
-
-.results-bankroll {
-  width: 25%;
-}
-
-.results-list {
-  width: 55%;
-}
-
-.results-list > .card-body {
-  font-size: 1.05rem;
-}
-
-#result-table {
-  margin-top: 15px;
-}
-
-.results-bankroll-card {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-
-.card-bankvalue {
-  width: 48%;
-}
-
-.card-profitLoss {
-  width: 100%;
-}
-
-.card-roi {
-  width: 100%;
-}
-
-.card-roi > .card-body {
-  display: flex;
-  flex-direction: row;
-}
-
-.buttons {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding-top: 15px;
-}
-
-.buttons > button {
-  width: 30%;
-}
-
-.pagination-buttons {
-  display: flex;
-  justify-content: center;
-}
-
 /* HOVER TABLE */
 :root {
   --color: black;
@@ -527,7 +249,7 @@ table tbody tr:hover {
 /* TRANSITION */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.35s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active em versões anteriores a 2.1.8 */ {
   opacity: 0;
