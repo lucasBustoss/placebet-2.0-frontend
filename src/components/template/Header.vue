@@ -9,12 +9,23 @@
       <h1 class="title">Placebet</h1>
     </div>
     <div class="header-container container-usermenu">
-      <div>menu user</div>
+      <b-button @click.prevent="logout">Sair</b-button>
     </div>
   </header>
 </template>
 
 <script>
+import { userKey } from "@/global";
+
+export default {
+  methods: {
+    logout() {
+      localStorage.removeItem(userKey);
+      this.$store.commit("setUser", null);
+      this.$router.push({ name: "auth" });
+    },
+  },
+};
 </script>
 
 <style>

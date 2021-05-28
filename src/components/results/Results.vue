@@ -79,9 +79,9 @@ export default {
   },
   methods: {
     async loadInfos() {
-      await this.getBets();
-      await this.getResultsByDate();
-      await this.getStats();
+      this.getBets();
+      this.getResultsByDate();
+      this.getStats();
     },
     async getBets() {
       try {
@@ -92,9 +92,10 @@ export default {
           },
         });
 
+        console.log("carreguei");
+
         if (response && response.data !== undefined) {
           this.bets = response.data;
-          console.log(this.bets);
         }
       } catch (err) {
         showError(err);
@@ -109,6 +110,8 @@ export default {
           },
         });
 
+        console.log("carreguei");
+
         if (response && response.data !== undefined) {
           this.results = response.data;
         }
@@ -118,13 +121,16 @@ export default {
     },
     async loadBets() {
       try {
-        await api.get("/bets/integrate", {
+        await api.get("/betfair/integrate", {
           params: {
             user_id: this.user_id,
             username: "xistzera",
             password: "semSenha01@!",
           },
         });
+
+        console.log("carreguei");
+
         await this.loadInfos();
 
         this.$toasted.global.defaultSuccess();
@@ -140,6 +146,8 @@ export default {
             date: this.selectedMonth,
           },
         });
+
+        console.log("carreguei");
 
         if (response && response.data !== null) {
           this.stats = response.data;

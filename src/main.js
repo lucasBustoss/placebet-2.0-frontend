@@ -4,6 +4,7 @@ import App from './App.vue'
 
 import './config/bootstrap'
 import './config/msgs'
+import store from './config/store/store'
 
 Vue.config.productionTip = false
 
@@ -12,6 +13,7 @@ Vue.filter('formattedDecimalValue',)
 import router from './config/router'
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')

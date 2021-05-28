@@ -33,7 +33,8 @@ export default {
     };
   },
   methods: {
-    async loadStats() {
+    async loadStats() {},
+    async loadBankStats() {
       try {
         const bankResponse = await api.get("/stats/statsByYear", {
           params: {
@@ -45,7 +46,12 @@ export default {
         if (bankResponse && bankResponse.data !== null) {
           this.bankStats = bankResponse.data;
         }
-
+      } catch (err) {
+        showError(err);
+      }
+    },
+    async loadBetfairStats() {
+      try {
         const betfairResponse = await api.get("/stats/statsBetfairByYear", {
           params: {
             user_id: this.user_id,
@@ -56,21 +62,18 @@ export default {
         if (betfairResponse && betfairResponse.data !== null) {
           this.betfairStats = betfairResponse.data;
         }
-
-        this.$toasted.global.defaultSuccess();
       } catch (err) {
-        console.log("oie");
         showError(err);
       }
     },
-
     formattedDecimalValue(value) {
       const numberValue = Number(value);
       return numberValue.toFixed(2).replace(".", ",");
     },
   },
   async mounted() {
-    await this.loadStats();
+    this.loadBankStats();
+    this.loadBetfairStats();
   },
 };
 </script>

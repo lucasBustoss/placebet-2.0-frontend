@@ -4,8 +4,6 @@ export const baseApiUrl = 'http://localhost:3000'
 export const userKey = "__knowledge_user"
 
 export function showError(e) {
-  console.log('a')
-
   if (e && e.response && e.response.data.error) {
     Vue.toasted.global.defaultError({ msg: e.response.data.error })
   } else if (e && e.response && e.response.data) {
