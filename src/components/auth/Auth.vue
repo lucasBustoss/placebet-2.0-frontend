@@ -21,9 +21,9 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-button class="auth-submit-button" type="submit" variant="warning"
-        >Entrar</b-button
-      >
+      <b-button class="auth-submit-button" type="submit" variant="warning">
+        Entrar
+      </b-button>
     </b-form>
   </div>
 </template>
