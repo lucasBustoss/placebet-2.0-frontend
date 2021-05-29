@@ -47,10 +47,8 @@ export default {
       console.log(res.data);
 
       if (res.data && res.data.message) {
-        console.log("entrei no data");
         this.setUser(userData);
       } else {
-        console.log("token falso");
         this.$store.commit("setUser", null);
         localStorage.removeItem(userKey);
         this.$router.push({ name: "auth" }).catch(() => {});
@@ -59,8 +57,8 @@ export default {
       this.validatingToken = false;
     },
   },
-  created() {
-    this.validateToken();
+  async created() {
+    await this.validateToken();
   },
 };
 </script>
