@@ -44,11 +44,11 @@ export default {
 
       const res = await api.post("/sessions/validate", userData);
 
-      console.log(res.data);
-
       if (res.data) {
+        console.log("entrei no data");
         this.setUser(userData);
       } else {
+        console.log("token falso");
         this.$store.commit("setUser", null);
         localStorage.removeItem(userKey);
         this.$router.push({ name: "auth" }).catch(() => {});
