@@ -44,6 +44,8 @@ export default {
 
       const res = await api.post("/sessions/validate", userData);
 
+      console.log(res.data);
+
       if (res.data) {
         this.setUser(userData);
       } else {
