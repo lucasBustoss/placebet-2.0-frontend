@@ -2,11 +2,15 @@ import 'font-awesome/css/font-awesome.css'
 import Vue from 'vue'
 import App from './App.vue'
 
+import dotenv from 'dotenv';
+
 import './config/bootstrap'
 import './config/msgs'
 import store from './config/store/store'
 
 Vue.config.productionTip = false
+
+dotenv.config();
 
 Vue.filter('formattedDecimalValue',)
 
