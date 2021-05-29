@@ -46,7 +46,7 @@ export default {
 
       console.log(res.data);
 
-      if (res.data) {
+      if (res.data && res.data.message) {
         console.log("entrei no data");
         this.setUser(userData);
       } else {
