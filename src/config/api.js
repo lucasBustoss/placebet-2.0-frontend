@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 // const path = 'src/.env';
 // dotenv.config({ path });
 
