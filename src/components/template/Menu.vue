@@ -15,6 +15,9 @@
         <router-link to="results">
           <div class="sidebar-option">Resultados</div>
         </router-link>
+        <router-link to="methods">
+          <div class="sidebar-option">Estratégias</div>
+        </router-link>
       </b-sidebar>
     </h1>
   </header>

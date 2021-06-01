@@ -51,7 +51,6 @@ export default {
         const response = await api.post("/sessions/auth", this.user);
 
         if (response.status === 200) {
-          console.log("loguei");
           this.setUser(response.data);
 
           localStorage.setItem(userKey, JSON.stringify(response.data));

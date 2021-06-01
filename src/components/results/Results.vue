@@ -74,7 +74,6 @@ export default {
       ],
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       stats: {},
-      user_id: "a2e1736d-15bb-4c21-879d-6e28cfff552d",
     };
   },
   methods: {
@@ -87,7 +86,6 @@ export default {
       try {
         const response = await api.get("/bets", {
           params: {
-            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });
@@ -105,7 +103,6 @@ export default {
       try {
         const response = await api.get("/bets/resultsPerDate", {
           params: {
-            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });
@@ -123,7 +120,6 @@ export default {
       try {
         await api.get("/betfair/integrate", {
           params: {
-            user_id: this.user_id,
             username: "xistzera",
             password: "semSenha01@!",
           },
@@ -142,7 +138,6 @@ export default {
       try {
         const response = await api.get("/stats", {
           params: {
-            user_id: this.user_id,
             date: this.selectedMonth,
           },
         });

@@ -27,18 +27,15 @@ export default {
   components: { HomeBank, HomeBetfair },
   data() {
     return {
-      user_id: "a2e1736d-15bb-4c21-879d-6e28cfff552d",
       bankStats: [],
       betfairStats: [],
     };
   },
   methods: {
-    async loadStats() {},
     async loadBankStats() {
       try {
         const bankResponse = await api.get("/stats/statsByYear", {
           params: {
-            user_id: this.user_id,
             date: format(new Date(), "yyyy-MM-dd"),
           },
         });
@@ -47,14 +44,15 @@ export default {
           this.bankStats = bankResponse.data;
         }
       } catch (err) {
+        console.log(err);
         showError(err);
+        return;
       }
     },
     async loadBetfairStats() {
       try {
         const betfairResponse = await api.get("/stats/statsBetfairByYear", {
           params: {
-            user_id: this.user_id,
             date: format(new Date(), "yyyy-MM-dd"),
           },
         });
@@ -63,7 +61,12 @@ export default {
           this.betfairStats = betfairResponse.data;
         }
       } catch (err) {
-        showError(err);
+        showError(
+          err.error === "Invalid Token?"
+            ? { error: "Faça o login na aplicação" }
+            : err
+        );
+        return;
       }
     },
     formattedDecimalValue(value) {
