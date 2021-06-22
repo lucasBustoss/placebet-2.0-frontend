@@ -36,6 +36,8 @@
         :showResults="showResults"
         @loadBets="loadBets"
         @getBets="getBets"
+        :formattedDecimalValue="formattedDecimalValue"
+        :methods="methods"
       />
     </b-card-group>
   </div>
@@ -74,10 +76,12 @@ export default {
       ],
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       stats: {},
+      methods: [],
     };
   },
   methods: {
     async loadInfos() {
+      this.loadMethods();
       this.getBets();
       this.getResultsByDate();
       this.getStats();
@@ -89,8 +93,6 @@ export default {
             date: this.selectedMonth,
           },
         });
-
-        console.log("carreguei");
 
         if (response && response.data !== undefined) {
           this.bets = response.data;
@@ -107,8 +109,6 @@ export default {
           },
         });
 
-        console.log("carreguei");
-
         if (response && response.data !== undefined) {
           this.results = response.data;
         }
@@ -124,8 +124,6 @@ export default {
             password: "semSenha01@!",
           },
         });
-
-        console.log("carreguei");
 
         await this.loadInfos();
 
@@ -159,6 +157,18 @@ export default {
           };
         }
       } catch (err) {
+        showError(err);
+      }
+    },
+    async loadMethods() {
+      try {
+        const response = await api.get("/methods");
+
+        if (response && response.data) {
+          this.methods = response.data;
+        }
+      } catch (err) {
+        console.log(err);
         showError(err);
       }
     },

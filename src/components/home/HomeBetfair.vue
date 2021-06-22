@@ -20,10 +20,10 @@
         >R$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
       >
       <template #cell(withdraw)="props">
-        R$ {{ formattedDecimalValue(props.item.withdraws) }}</template
+        R$ {{ formattedDecimalValue(props.item.betfairWithdraws) }}</template
       >
       <template #cell(deposit)="props"
-        >R$ {{ formattedDecimalValue(props.item.deposits) }}%</template
+        >R$ {{ formattedDecimalValue(props.item.betfairDeposits) }}</template
       >
       <template #cell(finalBank)="props"
         >R$ {{ formattedDecimalValue(props.item.finalBankBetfair) }}</template

@@ -15,6 +15,7 @@
       :fields="betFields"
       :per-page="perPage"
       :current-page="currentPage"
+      @click="showModal"
     >
       <template #cell(date)="data">{{ data.item.date }}</template>
       <template #cell(eventDescription)="data">{{
@@ -22,10 +23,33 @@
       }}</template>
       <template #cell(method)="data">{{ data.item.method }}</template>
       <template #cell(profitLoss)="data">
-        R$ {{ data.item.profitLoss }}</template
+        R$ {{ formattedDecimalValue(data.item.profitLoss) }}</template
       >
-      <template #cell(roi)="data">{{ data.item.roi }}%</template>
+      <template #cell(roi)="data"
+        >{{ formattedDecimalValue(data.item.roi) }}%</template
+      >
+      <template #cell(goalsScored)="data">{{ data.item.goalsScored }}</template>
+      <template #cell(goalsConceded)="data">{{
+        data.item.goalsConceded
+      }}</template>
+      <template #cell()="data">
+        <div class="edit-column">
+          <i
+            class="edit-result fa fa-pencil-square-o"
+            v-b-modal.modal-1
+            @click="showModal(data)"
+          ></i></div
+      ></template>
     </b-table>
+
+    <template v-if="toggle">
+      <ResultsBetModal
+        :bet="bet"
+        :formattedDecimalValue="formattedDecimalValue"
+        :methods="methods"
+        @loadBets="loadBets"
+      />
+    </template>
 
     <div class="pagination-buttons">
       <b-pagination
@@ -39,8 +63,11 @@
 </template>
 
 <script>
+import ResultsBetModal from "./ResultsBetModal";
+
 export default {
-  props: ["showResults", "bets"],
+  props: ["showResults", "bets", "methods", "formattedDecimalValue"],
+  components: { ResultsBetModal },
   computed: {
     rows() {
       return this.bets.length;
@@ -74,9 +101,22 @@ export default {
           key: "roi",
           label: "ROI (%)",
         },
+        {
+          key: "goalsScored",
+          label: "GP",
+        },
+        {
+          key: "goalsConceded",
+          label: "GT",
+        },
+        {
+          label: "",
+        },
       ],
       perPage: 20,
       currentPage: 1,
+      bet: {},
+      toggle: false,
     };
   },
   methods: {
@@ -85,6 +125,15 @@ export default {
     },
     loadBets() {
       this.$emit("loadBets");
+    },
+    async showModal(data) {
+      this.bet = data.item;
+
+      await this.mountModal();
+      this.$bvModal.show("bet-modal");
+    },
+    mountModal() {
+      this.toggle = true;
     },
   },
 };
@@ -124,5 +173,16 @@ export default {
 .pagination-buttons {
   display: flex;
   justify-content: center;
+}
+
+.edit-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+}
+
+.edit-result {
+  cursor: pointer;
 }
 </style>
