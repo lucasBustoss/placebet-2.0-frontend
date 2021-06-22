@@ -101,17 +101,17 @@ export default {
           key: "roi",
           label: "ROI (%)",
         },
-        {
-          key: "goalsScored",
-          label: "GP",
-        },
-        {
-          key: "goalsConceded",
-          label: "GT",
-        },
-        {
-          label: "",
-        },
+        // {
+        //   key: "goalsScored",
+        //   label: "GP",
+        // },
+        // {
+        //   key: "goalsConceded",
+        //   label: "GT",
+        // },
+        // {
+        //   label: "",
+        // },
       ],
       perPage: 20,
       currentPage: 1,
