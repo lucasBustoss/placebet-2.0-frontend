@@ -56,7 +56,8 @@
         :bet="bet"
         :formattedDecimalValue="formattedDecimalValue"
         :methods="methods"
-        @loadBets="loadBets"
+        :leagues="leagues"
+        @updateBet="updateBet"
       />
     </template>
 
@@ -85,6 +86,7 @@ export default {
     "showResults",
     "bets",
     "methods",
+    "leagues",
     "loadingBets",
     "formattedDecimalValue",
   ],
@@ -158,8 +160,8 @@ export default {
     getBets() {
       this.$emit("getBets");
     },
-    loadBets() {
-      this.$emit("loadBets");
+    updateBet(bet) {
+      this.$emit("updateBet", bet);
     },
     async showEditModal(data) {
       this.bet = data.item;

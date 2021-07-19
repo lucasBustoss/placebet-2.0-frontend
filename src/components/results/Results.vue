@@ -122,10 +122,12 @@
         :bets="bets"
         :showResults="showResults"
         :methods="methods"
+        :leagues="leagues"
         :loadingBets="loadingBets"
         :formattedDecimalValue="formattedDecimalValue"
         @importBets="importBets"
         @getBets="getBets"
+        @updateBet="updateBet"
         @deleteBet="deleteBet"
       />
     </b-card-group>
@@ -160,12 +162,14 @@ export default {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       stats: {},
       methods: [],
+      leagues: [],
     };
   },
   methods: {
     ...mapMutations(["setBetsToImport"]),
     async loadInfos() {
       this.loadMethods();
+      this.loadLeagues();
       this.getResultsByDate();
       this.getStats();
       await this.getBets();
@@ -258,6 +262,37 @@ export default {
         }
       } catch (err) {
         console.log(err);
+        showError(err);
+      }
+    },
+    async loadLeagues() {
+      try {
+        const response = await api.get("/leagues");
+
+        if (response && response.data) {
+          this.leagues = response.data;
+        }
+      } catch (err) {
+        console.log(err);
+        showError(err);
+      }
+    },
+    async updateBet(bet) {
+      try {
+        const method = this.methods.filter((m) => m.name === bet.method);
+        const league = this.leagues.filter((l) => l.name === bet.league);
+
+        await api.patch("/bets/" + bet.id, {
+          stake: bet.stake,
+          method_id: method.length > 0 ? method[0].id : null,
+          league_id: league.length > 0 ? league[0].id : null,
+          goalsScored: bet.goalsScored,
+          goalsConceded: bet.goalsConceded,
+        });
+
+        showSuccess();
+        this.loadInfos();
+      } catch (err) {
         showError(err);
       }
     },

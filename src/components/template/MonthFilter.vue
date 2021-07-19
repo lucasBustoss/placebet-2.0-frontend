@@ -3,7 +3,7 @@
     <b-button squared variant="outline-warning" @click="getPreviousMonth">
       <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </b-button>
-    <b-button squared variant="outline-warning" class="options-date-selector">
+    <b-button squared variant="warning" class="options-date-selector">
       <div>{{ monthName }}</div>
     </b-button>
 
@@ -77,5 +77,13 @@ export default {
   padding: 10px;
   width: 100%;
   justify-content: flex-end;
+}
+
+.btn-outline-warning:hover {
+  background: rgba(255, 193, 7, 0.5) !important;
+}
+.btn-outline-warning:active:focus {
+  box-shadow: none !important;
+  background: rgba(255, 193, 7, 0.8) !important;
 }
 </style>

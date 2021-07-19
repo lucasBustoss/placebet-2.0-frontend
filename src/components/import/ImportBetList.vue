@@ -690,8 +690,7 @@ export default {
 .dropdown-selector-all {
   display: flex;
 }
-
-.dropdown-selector-all-button > button,
+*/ .dropdown-selector-all-button > button,
 .dropdown-selector-all-button > button:hover,
 .dropdown-selector-all-button > button:active,
 .dropdown-selector-all-button > button:focus {
@@ -731,7 +730,6 @@ export default {
 }
 
 .dropdown-toggle,
-/*.dropdown-toggle:hover,*/
 .dropdown-toggle:active,
 .dropdown-toggle:focus,
 .dropdown-toggle:active + .dropdown-toggle:focus,

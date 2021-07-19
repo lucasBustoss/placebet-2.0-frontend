@@ -9,7 +9,7 @@
       body-bg-variant="light"
       footer-bg-variant="light"
       modal-ok="salvar"
-      :title="bet.eventDescription"
+      :title="bet.eventDescription + ' - ' + bet.marketDesc"
     >
       <div class="modal-row">
         <b-form-group
@@ -20,7 +20,7 @@
           <b-form-input
             disabled
             id="input-date"
-            :value="bet.date"
+            :value="formattedDate(bet.date)"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -34,8 +34,15 @@
             :value="bet.eventDescription"
           ></b-form-input>
         </b-form-group>
-      </div>
-      <div class="modal-row">
+
+        <b-form-group
+          label="Stake (R$)"
+          label-for="input-stake"
+          class="mb-0 modalbet-goals"
+        >
+          <b-form-input id="input-stake" v-model="selectedStake"></b-form-input>
+        </b-form-group>
+
         <b-form-group
           label="Resultado"
           label-for="input-profitloss"
@@ -47,6 +54,7 @@
             :value="'R$ ' + formattedDecimalValue(bet.profitLoss)"
           ></b-form-input>
         </b-form-group>
+
         <b-form-group
           label="ROI(%)"
           label-for="input-roi"
@@ -59,27 +67,43 @@
           ></b-form-input>
         </b-form-group>
       </div>
+      <div class="modal-row"></div>
       <div class="modal-row">
         <b-form-group
           label="Estratégia"
           label-for="input-method"
-          class="mb-0 modalbet-method"
+          class="mb-0 modalbet-method-league"
         >
-          <b-dropdown
-            split
-            split-variant="outline-secondary"
-            variant="secondary"
-            class="method-dropdown"
-            disabled
-            :text="getTextDropdown"
-          >
-            <b-dropdown-item
-              v-for="method in methods"
-              @click="setMethod(method.name)"
-              :key="method.id"
-              >{{ method.name }}</b-dropdown-item
-            >
-          </b-dropdown>
+          <b-form-input
+            v-model="selectedMethod"
+            autocomplete="off"
+            list="methods-list"
+            :state="existsMethodName"
+          ></b-form-input>
+          <datalist id="methods-list">
+            <option>Não selecionar</option>
+            <option v-for="method in methods" :key="method.id">
+              {{ method.name }}
+            </option>
+          </datalist>
+        </b-form-group>
+        <b-form-group
+          label="Campeonato"
+          label-for="input-method"
+          class="mb-0 modalbet-method-league"
+        >
+          <b-form-input
+            v-model="selectedLeague"
+            autocomplete="off"
+            list="leagues-list"
+            :state="existsLeagueName"
+          ></b-form-input>
+          <datalist id="leagues-list">
+            <option>Não selecionar</option>
+            <option v-for="league in leagues" :key="league.id">
+              {{ league.name }}
+            </option>
+          </datalist>
         </b-form-group>
         <b-form-group
           label="Gols pegos"
@@ -118,46 +142,69 @@
 </template>
 
 <script>
-import api from "@/config/api";
+import { format, parseISO } from "date-fns";
+
 import { showError } from "@/global";
 
 export default {
-  props: ["bet", "methods", "formattedDecimalValue"],
+  props: ["bet", "methods", "leagues", "formattedDecimalValue"],
   computed: {
-    getTextDropdown() {
-      return this.selectedMethod;
+    getMethodNames() {
+      return this.methods.map((m) => m.name);
+    },
+    getLeagueNames() {
+      return this.leagues.map((m) => m.name);
+    },
+    existsMethodName() {
+      return (
+        this.methods.filter((m) => m.name === this.selectedMethod).length > 0 ||
+        this.selectedMethod === "Não selecionar"
+      );
+    },
+    existsLeagueName() {
+      return (
+        this.leagues.filter((m) => m.name === this.selectedLeague).length > 0 ||
+        this.selectedLeague === "Não selecionar"
+      );
     },
   },
   data() {
     return {
-      selectedMethod: this.bet.method,
+      selectedStake: this.bet.stake,
+      selectedMethod: this.bet.method || null,
+      selectedLeague: this.bet.league || null,
       goalsScored: this.bet.goalsScored ? this.bet.goalsScored : "0",
       goalsConceded: this.bet.goalsConceded ? this.bet.goalsConceded : "0",
     };
   },
   methods: {
-    setMethod(method) {
-      this.selectedMethod = method;
+    formattedDate(value) {
+      return format(parseISO(value), "dd/MM/yyyy");
     },
     async updateBet() {
-      try {
-        const objMethod = this.methods.filter(
-          (m) => m.name === this.selectedMethod
-        );
-
-        await api.patch("/bets", {
-          eventId: this.bet.eventId,
-          marketIds: this.bet.marketIds,
-          method_id: objMethod[0].id,
+      if (this.existsMethodName && this.existsLeagueName) {
+        await this.$emit("updateBet", {
+          id: this.bet.id,
+          stake: this.selectedStake,
+          method:
+            this.selectedMethod === "Não selecionar"
+              ? null
+              : this.selectedMethod,
+          league:
+            this.selectedLeague === "Não selecionar"
+              ? null
+              : this.selectedLeague,
           goalsScored: this.goalsScored,
           goalsConceded: this.goalsConceded,
         });
 
-        await this.$emit("loadBets");
         this.hideModal();
-      } catch (err) {
-        console.log(err);
-        showError(err);
+      } else if (!this.existsMethodName) {
+        showError("Selecione um método válido");
+        return;
+      } else if (!this.existsLeagueName) {
+        showError("Selecione uma liga válida");
+        return;
       }
     },
     hideModal() {
@@ -178,24 +225,42 @@ export default {
 }
 
 .modalbet-date {
-  width: 30%;
+  width: 14.5%;
 }
 
 .modalbet-event {
-  width: 69%;
+  width: 37%;
 }
 
 .modalbet-profitloss,
 .modalbet-roi {
-  width: 49.5%;
+  width: 16%;
 }
 
-.modalbet-method {
-  width: 50%;
+.modalbet-method-league {
+  width: 35%;
+}
+
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+.modalbet-select {
+  padding: 6.5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modalbet-method-select {
+  width: 100%;
+}
+
+.modalbet-league-select {
+  width: 100%;
 }
 
 .modalbet-goals {
-  width: 24.5%;
+  width: 14%;
 }
 
 .form-control:focus {

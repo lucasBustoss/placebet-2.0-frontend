@@ -25,28 +25,12 @@
 </template>
 
 <script>
+import { format, startOfMonth } from "date-fns";
+
 import { showError } from "@/global";
 import api from "@/config/api";
 
 export default {
-  methods: {
-    async loadMethods() {
-      try {
-        const response = await api.get("/methods/stats");
-
-        if (response && response.data) {
-          this.methods = response.data;
-        }
-      } catch (err) {
-        showError(err);
-        return;
-      }
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2).replace(".", ",");
-    },
-  },
   data() {
     return {
       methods: [],
@@ -84,7 +68,30 @@ export default {
           label: "% Reds",
         },
       ],
+      selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
     };
+  },
+  methods: {
+    async loadMethods() {
+      try {
+        const response = await api.get("/methods/stats", {
+          params: {
+            date: this.selectedMonth,
+          },
+        });
+
+        if (response && response.data) {
+          this.methods = response.data;
+        }
+      } catch (err) {
+        showError(err);
+        return;
+      }
+    },
+    formattedDecimalValue(value) {
+      const numberValue = Number(value);
+      return numberValue.toFixed(2).replace(".", ",");
+    },
   },
   async mounted() {
     this.loadMethods();
