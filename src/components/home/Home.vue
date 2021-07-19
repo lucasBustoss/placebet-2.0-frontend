@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <h1>Home</h1>
     <div class="home-lists">
       <HomeBank
@@ -82,6 +82,14 @@ export default {
 </script>
 
 <style>
+.home {
+  padding: 20px;
+}
+
+.home > h1 {
+  margin-left: 10px;
+}
+
 .home-lists {
   display: flex;
   justify-content: space-between;

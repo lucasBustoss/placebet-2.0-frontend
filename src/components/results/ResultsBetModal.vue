@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-modal
-      id="bet-modal"
+      id="bet-edit-modal"
       centered
       size="lg"
       :header-bg-variant="bet.profitLoss > 0 ? 'success' : 'danger'"
@@ -105,10 +105,10 @@
       </div>
       <template #modal-footer>
         <div class="betmodal-footer">
-          <b-button variant="outline-danger" @click="hideModal" size="md">
+          <b-button variant="danger" @click="hideModal" size="md">
             Cancelar
           </b-button>
-          <b-button variant="outline-success" @click="updateBet" size="md">
+          <b-button variant="success" @click="updateBet" size="md">
             Atualizar
           </b-button>
         </div>
@@ -161,7 +161,7 @@ export default {
       }
     },
     hideModal() {
-      this.$bvModal.hide("bet-modal");
+      this.$bvModal.hide("bet-edit-modal");
     },
   },
 };

@@ -13,7 +13,7 @@ html, body, #root {
 }
 body {
   -webkit-font-smoothing: antialiased;
-  background-color: #efefef;
+  background-color: #ededed !important;
 }
 body, input, button {
   font-family: 'Montserrat', sans-serif;
@@ -32,4 +32,33 @@ button {
 button:focus {
   outline: none;
   border: none;
+}
+
+/* PAGINATION */
+
+.page-item > span {
+  background: rgb(209, 209, 209) !important;
+  color: rgb(87, 87, 87) !important;
+  border: 1px solid rgb(214, 214, 214) !important;
+}
+
+.page-link {
+  background: #eee !important;
+  color: rgb(87, 87, 87) !important;
+  border: 1px solid rgb(214, 214, 214) !important;
+}
+
+.page-link:hover {
+  background: rgb(143, 143, 143) !important;
+  color: #fff !important;
+  border: 1px solid rgb(131, 131, 131) !important;
+}
+
+.page-link:focus, 
+.page-link:active,
+.page-item.active .page-link {
+  background: rgb(58, 57, 57) !important;
+  color: #fff !important;
+  border: 1px solid rgb(58, 57, 57) !important;
+  box-shadow: none !important;
 }

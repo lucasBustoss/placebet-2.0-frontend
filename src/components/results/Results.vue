@@ -1,93 +1,178 @@
 <template>
   <div class="results">
     <div class="results-header">
-      <h1>Resultados</h1>
-      <div class="results-header-icon">
-        <i
-          @click="showResults = !showResults"
-          :class="showResults ? 'fa fa-eye' : 'fa fa-eye-slash'"
-        ></i>
-      </div>
+      <h1 class="results-header-title">Resultados</h1>
+
+      <MonthFilter :selectedMonth="selectedMonth" @changeMonth="changeMonth" />
     </div>
 
-    <div class="results-options">
-      <b-form-select
-        class="option-selectMonth"
-        size="lg"
-        v-model="selectedMonth"
-        :options="months"
-        @change="loadInfos"
-      ></b-form-select>
+    <hr />
+
+    <div class="buttons">
+      <b-button
+        pill
+        variant="outline-warning"
+        @click="importBets"
+        class="button-import"
+        ><div v-if="!loadingImport">
+          <i class="fa fa-plus result-button-icon" aria-hidden="true"></i>
+          Importar resultados
+        </div>
+        <b-spinner v-else variant="secondary"></b-spinner>
+      </b-button>
+      <b-button pill variant="outline-success" class="button-share">
+        <i
+          class="fa fa-share-square-o result-button-icon"
+          aria-hidden="true"
+        ></i>
+        Compartilhar resultados</b-button
+      >
     </div>
+
+    <hr />
+
+    <div class="results-cards">
+      <b-card
+        border-variant="secondary"
+        class="text-center results-cards-info card-info-month-result"
+      >
+        <i
+          class="fa fa-line-chart result-card-icon result-card-icon-markets"
+          aria-hidden="true"
+        ></i>
+        <b-card-text class="result-card-text">
+          <div class="card-text-number">
+            <div v-if="!isLoading">{{ stats.marketsCount }}</div>
+            <div v-else>--</div>
+          </div>
+          <div class="card-text-stat">mercados trabalhados</div>
+        </b-card-text>
+      </b-card>
+      <b-card border-variant="secondary" class="text-center results-cards-info">
+        <i
+          class="fa fa-percent result-card-icon result-card-icon-markets"
+          aria-hidden="true"
+        ></i
+        ><b-card-text class="result-card-text">
+          <div class="card-text-number">
+            <div v-if="!isLoading">
+              R$ {{ formattedDecimalValue(stats.avgStake) }}
+            </div>
+            <div v-else>--</div>
+          </div>
+          <div class="card-text-stat">stake média</div>
+        </b-card-text>
+      </b-card>
+      <b-card border-variant="secondary" class="text-center results-cards-info">
+        <i
+          :class="
+            stats.profitLoss < 0
+              ? 'fa fa-usd  card-text-number result-card-red'
+              : 'fa fa-usd  card-text-number result-card-green'
+          "
+          aria-hidden="true"
+        ></i>
+        <b-card-text class="result-card-text">
+          <div
+            :class="
+              stats.profitLoss < 0
+                ? 'card-text-number result-card-red'
+                : 'card-text-number result-card-green'
+            "
+          >
+            <div v-if="!isLoading">
+              R$ {{ formattedDecimalValue(stats.profitLoss) }}
+            </div>
+            <div v-else>--</div>
+          </div>
+          <div class="card-text-stat">resultado mensal</div>
+        </b-card-text>
+      </b-card>
+      <b-card border-variant="secondary" class="text-center results-cards-info">
+        <i
+          :class="
+            stats.roiStake < 0
+              ? 'fa fa-percent  card-text-number result-card-red'
+              : 'fa fa-percent  card-text-number result-card-green'
+          "
+          aria-hidden="true"
+        ></i
+        ><b-card-text class="result-card-text">
+          <div
+            :class="
+              stats.roiStake < 0
+                ? 'card-text-number result-card-red'
+                : ' card-text-number result-card-green'
+            "
+          >
+            <div v-if="!isLoading">
+              {{ formattedDecimalValue(stats.roiStake) }}%
+            </div>
+            <div v-else>--</div>
+          </div>
+          <div class="card-text-stat">lucro sobre a stake</div>
+        </b-card-text>
+      </b-card>
+    </div>
+
+    <hr />
 
     <b-card-group deck>
-      <transition name="fade">
-        <ResultsMonth v-show="showResults" :results="results" />
-      </transition>
-      <transition name="fade">
-        <ResultsBank
-          v-show="showResults"
-          :stats="stats"
-          :formattedDecimalValue="formattedDecimalValue"
-        />
-      </transition>
       <ResultsBetList
         :bets="bets"
         :showResults="showResults"
-        @loadBets="loadBets"
-        @getBets="getBets"
-        :formattedDecimalValue="formattedDecimalValue"
         :methods="methods"
+        :loadingBets="loadingBets"
+        :formattedDecimalValue="formattedDecimalValue"
+        @importBets="importBets"
+        @getBets="getBets"
+        @deleteBet="deleteBet"
       />
     </b-card-group>
   </div>
 </template>
 
 <script>
-import ResultsMonth from "./ResultsMonth";
-import ResultsBank from "./ResultsBank";
 import ResultsBetList from "./ResultsBetList";
+import MonthFilter from "../template/MonthFilter";
 
 import { startOfMonth, format } from "date-fns";
 
-import { showError } from "@/global";
+import { showError, showSuccess } from "@/global";
 import api from "@/config/api";
 
+import { mapMutations } from "vuex";
+
 export default {
-  components: { ResultsMonth, ResultsBank, ResultsBetList },
+  components: { ResultsBetList, MonthFilter },
+  computed: {
+    isLoading() {
+      return this.loadingBets;
+    },
+  },
   data() {
     return {
       showResults: false,
+      loadingImport: false,
+      loadingBets: false,
       bets: [],
       results: [],
-      months: [
-        { value: "2021-01-01", text: "Janeiro" },
-        { value: "2021-02-01", text: "Fevereiro" },
-        { value: "2021-03-01", text: "Março" },
-        { value: "2021-04-01", text: "Abril" },
-        { value: "2021-05-01", text: "Maio" },
-        { value: "2021-06-01", text: "Junho" },
-        { value: "2021-07-01", text: "Julho" },
-        { value: "2021-08-01", text: "Agosto" },
-        { value: "2021-09-01", text: "Setembro" },
-        { value: "2021-10-01", text: "Outubro" },
-        { value: "2021-11-01", text: "Novembro" },
-        { value: "2021-12-01", text: "Dezembro" },
-      ],
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       stats: {},
       methods: [],
     };
   },
   methods: {
+    ...mapMutations(["setBetsToImport"]),
     async loadInfos() {
       this.loadMethods();
-      this.getBets();
       this.getResultsByDate();
       this.getStats();
+      await this.getBets();
     },
     async getBets() {
       try {
+        this.loadingBets = true;
         const response = await api.get("/bets", {
           params: {
             date: this.selectedMonth,
@@ -97,7 +182,10 @@ export default {
         if (response && response.data !== undefined) {
           this.bets = response.data;
         }
+
+        this.loadingBets = false;
       } catch (err) {
+        this.loadingBets = false;
         showError(err);
       }
     },
@@ -116,18 +204,19 @@ export default {
         showError(err);
       }
     },
-    async loadBets() {
+    async importBets() {
       try {
-        await api.get("/betfair/integrate", {
-          params: {
-            username: "xistzera",
-            password: "semSenha01@!",
-          },
-        });
+        this.loadingImport = true;
+        const response = await api.get("/betfair/integrate");
 
-        await this.loadInfos();
+        if (response.data.length > 0) {
+          this.setBetsToImport(response.data);
+          this.$router.push({ name: "import" });
+        } else {
+          showSuccess("Todas as entradas já estão sincronizadas!");
+        }
 
-        this.$toasted.global.defaultSuccess();
+        this.loadingImport = false;
       } catch (err) {
         showError(err);
       }
@@ -139,8 +228,6 @@ export default {
             date: this.selectedMonth,
           },
         });
-
-        console.log("carreguei");
 
         if (response && response.data !== null) {
           this.stats = response.data;
@@ -154,6 +241,8 @@ export default {
             profitLoss: 0,
             roiBank: 0,
             roiStake: 0,
+            marketsCount: 0,
+            avgStake: 0,
           };
         }
       } catch (err) {
@@ -172,9 +261,24 @@ export default {
         showError(err);
       }
     },
+    async deleteBet(id) {
+      try {
+        const response = await api.delete("/bets/" + id);
+
+        showSuccess(response.data.message.toString());
+        this.loadInfos();
+      } catch (err) {
+        showError(err);
+      }
+    },
+
     formattedDecimalValue(value) {
       const numberValue = Number(value);
       return numberValue.toFixed(2).replace(".", ",");
+    },
+    async changeMonth(value) {
+      this.selectedMonth = format(value, "yyyy-MM-dd");
+      await this.loadInfos();
     },
   },
   async mounted() {
@@ -184,21 +288,22 @@ export default {
 </script>
 
 <style>
-h1 {
-  text-align: center;
-}
-
 .results {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  padding: 20px;
 }
 
 .results-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
+  font-size: 1em;
+}
+
+.results-header-title {
+  font-size: 1.7em;
 }
 
 .results-header-icon {
@@ -206,26 +311,126 @@ h1 {
   cursor: pointer;
 }
 
+.spinner-loading-month {
+  height: 18px;
+  width: 18px;
+}
+
+.buttons {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons > button {
+  width: 49%;
+  height: 7vh;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.buttons > button {
+  width: 49.5%;
+  height: 7vh;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-import {
+  color: #bb8c01;
+}
+
+/* FOCUS BUTTONS */
+
+.buttons > button:focus,
+.results-options > button:focus {
+  box-shadow: none;
+}
+
+.buttons > .button-import:focus,
+.results-options > button:focus {
+  border: 1px solid #ffc107;
+}
+
+.buttons > .button-share:focus {
+  border: 1px solid #198754;
+}
+
+.results-options > .options-date-selector:focus {
+  border-left: none;
+  border-right: none;
+}
+
+/* END FOCUS BUTTONS */
+
+.result-button-icon {
+  font-size: 1.1em;
+  margin-left: 10px;
+}
+
+.result-card-icon {
+  font-size: 2em;
+}
+
+.result-card-icon-markets {
+  color: #e9b301;
+}
+
+.result-card-green {
+  color: green !important;
+}
+
+.result-card-red {
+  color: rgb(197, 1, 1) !important;
+}
+
+.results-cards {
+  display: flex;
+  justify-content: space-between;
+}
+
+.results-cards-info {
+  width: 32%;
+  height: 9vh;
+}
+
+.results-cards-info > .card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.result-card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: default;
+}
+
+.card-text-number {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: #555;
+}
+
+.card-text-stat {
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
 .close {
   border: none;
   background: inherit;
 }
 
-.option-selectMonth {
-  margin-left: 20px;
-  border-radius: 7px;
-  align-items: center;
-}
-
-.results-options {
-  display: flex;
-  padding: 10px;
-  width: 100%;
-  justify-content: center;
-}
-
-.option-selectMonth {
-  padding: 10px;
+.options-date-selector {
+  padding: 10px 50px;
+  border-left: none;
+  border-right: none;
+  color: black;
 }
 
 .results-content {

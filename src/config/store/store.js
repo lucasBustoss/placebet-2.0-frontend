@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: null,
+    betsToImport: []
   },
   mutations: {
     setUser(state, user) {
@@ -23,10 +24,12 @@ export default new Vuex.Store({
         state.isMenuVisible = false;
       }
     },
+    setBetsToImport(state, bets) {
+      state.betsToImport = bets;
+    },
   },
   actions: {
     async setUser({ commit }, payload) {
-      // commit('results/loadFavoriteMatches', response.data.favorites, { root: true })
       commit('setUser', payload)
     }
   }

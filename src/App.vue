@@ -2,7 +2,8 @@
   <div>
     <Header />
     <Menu />
-    <Content />
+    <Loading v-if="validatingToken" />
+    <Content v-else />
   </div>
 </template>
 
@@ -13,6 +14,7 @@ import { mapMutations } from "vuex";
 
 import { userKey } from "@/global";
 
+import Loading from "./components/template/Loading";
 import Header from "./components/template/Header";
 import Menu from "./components/template/Menu";
 import Content from "./components/template/Content";
@@ -23,10 +25,17 @@ export default {
     Header,
     Content,
     Menu,
+    Loading,
+  },
+  data() {
+    return {
+      validatingToken: true,
+    };
   },
   methods: {
     ...mapMutations(["setUser"]),
     async validateToken() {
+      console.log("validando");
       this.validatingToken = true;
 
       const json = localStorage.getItem(userKey);
@@ -49,6 +58,7 @@ export default {
         this.$router.push({ name: "auth" }).catch(() => {});
       }
 
+      console.log("fim");
       this.validatingToken = false;
     },
   },
