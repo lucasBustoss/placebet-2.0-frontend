@@ -1,6 +1,10 @@
 <template>
   <div class="methods">
-    <h1>Methods</h1>
+    <div class="methods-header">
+      <h1 class="methods-header-title">Estratégia</h1>
+    </div>
+
+    <hr />
     <div class="methods-list">
       <b-table striped hover :items="methods" :fields="betFields">
         <template #cell(name)="data">{{ data.item.name }}</template>
@@ -8,7 +12,7 @@
         <template #cell(greens)="data">{{ data.item.greens }}</template>
         <template #cell(reds)="data"> {{ data.item.reds }}</template>
         <template #cell(result)="data">
-          R$ {{ formattedDecimalValue(data.item.result) }}</template
+          $ {{ formattedDecimalValue(data.item.result) }}</template
         >
         <template #cell(roi)="data"
           >{{ formattedDecimalValue(data.item.roi) }}%</template
@@ -90,7 +94,7 @@ export default {
     },
     formattedDecimalValue(value) {
       const numberValue = Number(value);
-      return numberValue.toFixed(2).replace(".", ",");
+      return numberValue.toFixed(2);
     },
   },
   async mounted() {
@@ -103,13 +107,25 @@ export default {
 .methods {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.methods-header {
+  display: flex;
   align-items: center;
+  justify-content: left;
+  font-size: 1em;
+}
+
+.methods-header-title {
+  font-size: 1.7em;
 }
 
 .methods-list {
   padding: 30px;
   border: 1px solid #aaa;
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
 }
 </style>

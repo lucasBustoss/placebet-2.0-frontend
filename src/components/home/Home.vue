@@ -71,7 +71,7 @@ export default {
     },
     formattedDecimalValue(value) {
       const numberValue = Number(value);
-      return numberValue.toFixed(2).replace(".", ",");
+      return numberValue.toFixed(2);
     },
   },
   async mounted() {

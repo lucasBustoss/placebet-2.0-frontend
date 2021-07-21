@@ -22,10 +22,10 @@
       <template #cell(league)="data">{{ data.item.league }}</template>
       <template #cell(method)="data">{{ data.item.method }}</template>
       <template #cell(stake)="data"
-        >R$ {{ formattedDecimalValue(data.item.stake) }}</template
+        >$ {{ formattedDecimalValue(data.item.stake) }}</template
       >
       <template #cell(profitLoss)="data">
-        R$ {{ formattedDecimalValue(data.item.profitLoss) }}</template
+        $ {{ formattedDecimalValue(data.item.profitLoss) }}</template
       >
       <template #cell(roi)="data"
         >{{ formattedDecimalValue(data.item.roi) }}%</template

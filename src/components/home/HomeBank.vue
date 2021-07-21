@@ -10,19 +10,19 @@
     >
       <template #cell(month)="props">{{ props.item.month }}</template>
       <template #cell(initialBank)="props"
-        >R$ {{ formattedDecimalValue(props.item.startBank) }}</template
+        >$ {{ formattedDecimalValue(props.item.startBank) }}</template
       >
       <template #cell(profitLoss)="props"
-        >R$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
+        >$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
       >
       <template #cell(withdraw)="props">
-        R$ {{ formattedDecimalValue(props.item.bankWithdraws) }}</template
+        $ {{ formattedDecimalValue(props.item.bankWithdraws) }}</template
       >
       <template #cell(deposit)="props"
-        >R$ {{ formattedDecimalValue(props.item.bankDeposits) }}</template
+        >$ {{ formattedDecimalValue(props.item.bankDeposits) }}</template
       >
       <template #cell(finalBank)="props"
-        >R$ {{ formattedDecimalValue(props.item.finalBank) }}</template
+        >$ {{ formattedDecimalValue(props.item.finalBank) }}</template
       >
       <template #cell(roi)="props"
         >{{ formattedDecimalValue(props.item.roi) }}%</template

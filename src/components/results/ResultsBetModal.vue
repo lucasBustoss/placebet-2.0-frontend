@@ -36,7 +36,7 @@
         </b-form-group>
 
         <b-form-group
-          label="Stake (R$)"
+          label="Stake ($)"
           label-for="input-stake"
           class="mb-0 modalbet-goals"
         >
@@ -51,7 +51,7 @@
           <b-form-input
             disabled
             id="input-profitloss"
-            :value="'R$ ' + formattedDecimalValue(bet.profitLoss)"
+            :value="'$ ' + formattedDecimalValue(bet.profitLoss)"
           ></b-form-input>
         </b-form-group>
 

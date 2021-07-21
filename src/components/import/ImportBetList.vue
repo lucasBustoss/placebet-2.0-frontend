@@ -217,7 +217,7 @@
       </template>
       <template #cell(result)="data"
         ><div :class="getResultClass(data.item.profitLoss)">
-          R$ {{ formattedDecimalValue(data.item.profitLoss) }}
+          $ {{ formattedDecimalValue(data.item.profitLoss) }}
         </div></template
       >
       <template v-slot:head(goalsScored)="">
@@ -558,9 +558,9 @@ export default {
     },
     getStakeValue(bet) {
       if (bet.stake) {
-        return "R$ " + this.formattedDecimalValue(bet.stake);
+        return "$ " + this.formattedDecimalValue(bet.stake);
       } else {
-        return "R$ 0.00";
+        return "$ 0.00";
       }
     },
     getGoalsScored(bet) {

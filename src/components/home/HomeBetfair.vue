@@ -14,19 +14,19 @@
     >
       <template #cell(month)="props">{{ props.item.month }}</template>
       <template #cell(initialBank)="props"
-        >R$ {{ formattedDecimalValue(props.item.startBankBetfair) }}</template
+        >$ {{ formattedDecimalValue(props.item.startBankBetfair) }}</template
       >
       <template #cell(profitLoss)="props"
-        >R$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
+        >$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
       >
       <template #cell(withdraw)="props">
-        R$ {{ formattedDecimalValue(props.item.betfairWithdraws) }}</template
+        $ {{ formattedDecimalValue(props.item.betfairWithdraws) }}</template
       >
       <template #cell(deposit)="props"
-        >R$ {{ formattedDecimalValue(props.item.betfairDeposits) }}</template
+        >$ {{ formattedDecimalValue(props.item.betfairDeposits) }}</template
       >
       <template #cell(finalBank)="props"
-        >R$ {{ formattedDecimalValue(props.item.finalBankBetfair) }}</template
+        >$ {{ formattedDecimalValue(props.item.finalBankBetfair) }}</template
       >
     </b-table>
   </b-card>

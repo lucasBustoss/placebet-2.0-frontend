@@ -35,7 +35,7 @@ export default {
         },
         {
           key: "profitLossFormatted",
-          label: "Resultado (R$)",
+          label: "Resultado ($)",
         },
         {
           key: "roiFormatted",

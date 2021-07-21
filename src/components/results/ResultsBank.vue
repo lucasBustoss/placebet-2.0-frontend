@@ -19,7 +19,7 @@
             align="center"
           >
             <b-card-text
-              >R$ {{ formattedDecimalValue(stats.startBank) }}</b-card-text
+              >$ {{ formattedDecimalValue(stats.startBank) }}</b-card-text
             >
           </b-card>
           <b-card
@@ -31,7 +31,7 @@
             align="center"
           >
             <b-card-text
-              >R$ {{ formattedDecimalValue(stats.finalBank) }}</b-card-text
+              >$ {{ formattedDecimalValue(stats.finalBank) }}</b-card-text
             >
           </b-card>
         </b-card>
@@ -54,7 +54,7 @@
             align="center"
           >
             <b-card-text
-              >R$
+              >$
               {{ formattedDecimalValue(stats.startBankBetfair) }}</b-card-text
             >
           </b-card>
@@ -67,7 +67,7 @@
             align="center"
           >
             <b-card-text
-              >R$
+              >$
               {{ formattedDecimalValue(stats.finalBankBetfair) }}</b-card-text
             >
           </b-card>
@@ -84,7 +84,7 @@
           align="center"
         >
           <b-card-text
-            ><b>R$ {{ formattedDecimalValue(stats.stake) }}</b></b-card-text
+            ><b>$ {{ formattedDecimalValue(stats.stake) }}</b></b-card-text
           >
         </b-card>
       </div>
@@ -101,9 +101,7 @@
           :body-text-variant="stats.profitLoss < 0 ? 'danger' : 'success'"
         >
           <b-card-text
-            ><b
-              >R$ {{ formattedDecimalValue(stats.profitLoss) }}</b
-            ></b-card-text
+            ><b>$ {{ formattedDecimalValue(stats.profitLoss) }}</b></b-card-text
           >
         </b-card>
       </div>

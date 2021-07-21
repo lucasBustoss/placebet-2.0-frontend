@@ -56,7 +56,7 @@
         ><b-card-text class="result-card-text">
           <div class="card-text-number">
             <div v-if="!isLoading">
-              R$ {{ formattedDecimalValue(stats.avgStake) }}
+              $ {{ formattedDecimalValue(stats.avgStake) }}
             </div>
             <div v-else>--</div>
           </div>
@@ -81,7 +81,7 @@
             "
           >
             <div v-if="!isLoading">
-              R$ {{ formattedDecimalValue(stats.profitLoss) }}
+              $ {{ formattedDecimalValue(stats.profitLoss) }}
             </div>
             <div v-else>--</div>
           </div>
@@ -309,7 +309,7 @@ export default {
 
     formattedDecimalValue(value) {
       const numberValue = Number(value);
-      return numberValue.toFixed(2).replace(".", ",");
+      return numberValue.toFixed(2);
     },
     async changeMonth(value) {
       this.selectedMonth = format(value, "yyyy-MM-dd");
