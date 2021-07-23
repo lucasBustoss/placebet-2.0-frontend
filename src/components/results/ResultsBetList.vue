@@ -171,6 +171,7 @@ export default {
     },
     async showDeleteModal(data) {
       this.bet = data.item;
+      console.log(parseISO(this.bet.date));
       await this.mountDeleteModal();
       this.$bvModal.show("bet-delete-modal");
     },
