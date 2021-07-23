@@ -79,7 +79,7 @@
 <script>
 import ResultsBetModal from "./ResultsBetModal";
 import ResultsConfirmModal from "./ResultsConfirmModal";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, addHours } from "date-fns";
 
 export default {
   props: [
@@ -171,8 +171,6 @@ export default {
     },
     async showDeleteModal(data) {
       this.bet = data.item;
-      console.log(parseISO(this.bet.date));
-
       await this.mountDeleteModal();
       this.$bvModal.show("bet-delete-modal");
     },
@@ -180,7 +178,7 @@ export default {
       this.$emit("deleteBet", this.bet.id);
     },
     getDateFormatted(date) {
-      return format(parseISO(date), "dd/MM/yyyy");
+      return format(addHours(parseISO(date), 3), "dd/MM/yyyy");
     },
     mountEditModal() {
       this.toggleEdit = true;
