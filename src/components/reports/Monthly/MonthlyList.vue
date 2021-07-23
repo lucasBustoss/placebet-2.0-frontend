@@ -1,11 +1,11 @@
 <template>
-  <b-card class="daily-list">
-    <h2 class="daily-list-title">Resultados</h2>
+  <b-card class="monthly-list">
+    <h2 class="monthly-list-title">Resultados</h2>
     <hr />
 
-    <div class="daily-list-content">
+    <div class="monthly-list-content">
       <b-table
-        id="daily-list-table"
+        id="monthly-list-table"
         bordered
         small
         hover
@@ -16,7 +16,7 @@
       ></b-table>
       <b-spinner
         v-else
-        class="daily-list-loading"
+        class="monthly-list-loading"
         variant="secondary"
       ></b-spinner>
     </div>
@@ -55,32 +55,32 @@ export default {
 </script>
 
 <style>
-.daily-list {
+.monthly-list {
   display: flex;
   width: 34%;
 }
 
-.daily-list-title {
+.monthly-list-title {
   font-size: 1.3em;
 }
 
-.daily-list-content {
+.monthly-list-content {
   display: flex !important;
   justify-content: center;
   align-items: center;
 }
 
-.daily-list-loading {
+.monthly-list-loading {
   height: 70px;
   width: 70px;
 }
 
-#daily-list-table > thead,
-#daily-list-table > tbody {
+#monthly-list-table > thead,
+#monthly-list-table > tbody {
   text-align: center;
   align-items: center;
 }
-#daily-list-table > tbody {
+#monthly-list-table > tbody {
   font-size: 0.85rem;
 }
 </style>

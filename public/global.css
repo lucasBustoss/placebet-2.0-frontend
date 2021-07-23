@@ -27,11 +27,14 @@ ul {
 
 button {
   cursor: pointer;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 button:focus {
-  outline: none;
-  border: none;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* PAGINATION */

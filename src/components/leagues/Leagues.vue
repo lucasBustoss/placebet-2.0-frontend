@@ -1,20 +1,20 @@
 <template>
-  <div class="methods">
-    <div class="methods-header">
-      <h1 class="methods-header-title">Estratégias</h1>
+  <div class="leagues">
+    <div class="leagues-header">
+      <h1 class="leagues-header-title">Campeonatos</h1>
     </div>
 
     <hr />
-    <MethodsList
-      :methods="methods"
-      @insertMethod="insertMethod"
-      @deleteMethod="deleteMethod"
+    <LeaguesList
+      :leagues="leagues"
+      @insertLeague="insertLeague"
+      @deleteLeague="deleteLeague"
     />
   </div>
 </template>
 
 <script>
-import MethodsList from "./MethodsList";
+import LeaguesList from "./LeaguesList";
 
 import { format, startOfMonth } from "date-fns";
 
@@ -22,37 +22,37 @@ import { showError, showSuccess } from "@/global";
 import api from "@/config/api";
 
 export default {
-  components: { MethodsList },
+  components: { LeaguesList },
   data() {
     return {
-      methods: [],
+      leagues: [],
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
     };
   },
   methods: {
-    async loadMethods() {
+    async loadLeagues() {
       try {
-        const response = await api.get("/methods/stats", {
+        const response = await api.get("/leagues/stats", {
           params: {
             date: this.selectedMonth,
           },
         });
 
         if (response && response.data) {
-          this.methods = response.data;
+          this.leagues = response.data;
         }
       } catch (err) {
         showError(err);
         return;
       }
     },
-    async insertMethod(name) {
+    async insertLeague(name) {
       try {
-        await api.post("/methods", {
+        await api.post("/leagues", {
           name,
         });
 
-        this.loadMethods();
+        this.loadLeagues();
 
         showSuccess();
       } catch (err) {
@@ -60,39 +60,39 @@ export default {
         return;
       }
     },
-    async deleteMethod(id) {
+    async deleteLeague(id) {
       try {
-        const response = await api.delete("/methods/" + id);
+        const response = await api.delete("/leagues/" + id);
 
         showSuccess(response.data.message.toString());
-        this.loadMethods();
+        this.loadLeagues();
       } catch (err) {
         showError(err);
       }
     },
   },
   async mounted() {
-    this.loadMethods();
+    this.loadLeagues();
   },
 };
 </script>
 
 <style>
-.methods {
+.leagues {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 20px;
 }
 
-.methods-header {
+.leagues-header {
   display: flex;
   align-items: center;
   justify-content: left;
   font-size: 1em;
 }
 
-.methods-header-title {
+.leagues-header-title {
   font-size: 1.7em;
 }
 </style>

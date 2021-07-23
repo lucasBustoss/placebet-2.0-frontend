@@ -158,13 +158,15 @@ export default {
     existsMethodName() {
       return (
         this.methods.filter((m) => m.name === this.selectedMethod).length > 0 ||
-        this.selectedMethod === "Não selecionar"
+        this.selectedMethod === "Não selecionar" ||
+        this.selectedMethod === null
       );
     },
     existsLeagueName() {
       return (
         this.leagues.filter((m) => m.name === this.selectedLeague).length > 0 ||
-        this.selectedLeague === "Não selecionar"
+        this.selectedLeague === "Não selecionar" ||
+        this.selectedMethod === null
       );
     },
   },

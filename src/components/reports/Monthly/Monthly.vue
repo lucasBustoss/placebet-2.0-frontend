@@ -1,22 +1,25 @@
 <template>
-  <div class="daily-report">
-    <div class="daily-report-header">
-      <h1 class="daily-report-header-title">Resultado diário</h1>
+  <div class="monthly-report">
+    <div class="monthly-report-header">
+      <h1 class="monthly-report-header-title">Resultado mensal</h1>
       <MonthFilter :selectedMonth="selectedMonth" @changeMonth="changeMonth" />
     </div>
 
     <hr />
 
-    <div class="daily-report-content">
-      <DailyList :results="results" :isLoading="isLoading" />
-      <DailyChart :isLoading="isLoading" />
+    <div class="monthly-report-content">
+      <MonthlyList :results="results" :isLoading="isLoading" />
+      <div class="monthly-report-charts">
+        <MonthlyChart :isLoading="isLoading" />
+        <MonthlyChart :isLoading="isLoading" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import DailyList from "./DailyList";
-import DailyChart from "./DailyChart";
+import MonthlyList from "./MonthlyList";
+import MonthlyChart from "./MonthlyChart";
 import MonthFilter from "@/components/template/MonthFilter";
 
 import { format, startOfMonth } from "date-fns";
@@ -25,7 +28,7 @@ import { showError } from "@/global";
 import api from "@/config/api";
 
 export default {
-  components: { DailyChart, DailyList, MonthFilter },
+  components: { MonthlyChart, MonthlyList, MonthFilter },
   data() {
     return {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
@@ -69,14 +72,14 @@ export default {
 </script>
 
 <style>
-.daily-report {
+.monthly-report {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 20px;
 }
 
-.daily-report-header {
+.monthly-report-header {
   display: flex;
   align-items: center;
   justify-content: left;
@@ -84,13 +87,19 @@ export default {
   width: 100%;
 }
 
-.daily-report-header-title {
+.monthly-report-header-title {
   font-size: 1.7em;
   width: 50%;
 }
 
-.daily-report-content {
+.monthly-report-content {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+}
+
+.monthly-report-charts {
+  width: 100%;
+  margin: 0;
 }
 </style>

@@ -69,7 +69,7 @@ export default {
 }
 
 .month-filter > button:focus {
-  border: 1px solid #ffc107;
+  border: 1px solid #ffc107 !important;
 }
 
 .month-filter {

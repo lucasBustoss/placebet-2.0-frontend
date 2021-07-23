@@ -6,7 +6,8 @@ import Auth from '@/components/auth/Auth';
 import Results from '@/components/results/Results';
 import Import from '@/components/import/Import';
 import Methods from '@/components/methods/Methods';
-import ReportDaily from '@/components/reports/Daily/Daily';
+import Leagues from '@/components/leagues/Leagues';
+import ReportMonthly from '@/components/reports/Monthly/Monthly';
 import ReportBankroll from '@/components/reports/Bankroll/Bankroll';
 import ReportMethods from '@/components/reports/Methods/Methods';
 
@@ -39,9 +40,14 @@ const routes = [
     component: Methods
   },
   {
-    name: 'reportDaily',
-    path: '/reports/daily',
-    component: ReportDaily
+    name: 'leagues',
+    path: '/leagues',
+    component: Leagues
+  },
+  {
+    name: 'reportMonthly',
+    path: '/reports/monthly',
+    component: ReportMonthly
   },
   {
     name: 'reportBankroll',

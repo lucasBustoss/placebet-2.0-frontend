@@ -34,9 +34,9 @@
         <b-collapse id="collapse-1" class="collapse-options">
           <router-link
             class="collapse-options-link"
-            :to="{ name: 'reportDaily' }"
+            :to="{ name: 'reportMonthly' }"
           >
-            <div class="sidebar-option-collapse">Resultado diário</div>
+            <div class="sidebar-option-collapse">Resultado mensal</div>
           </router-link>
           <router-link
             class="collapse-options-link"
@@ -54,6 +54,10 @@
 
         <router-link :to="{ name: 'methods' }">
           <div class="sidebar-option">Estratégias</div>
+        </router-link>
+
+        <router-link :to="{ name: 'leagues' }">
+          <div class="sidebar-option">Campeonatos</div>
         </router-link>
       </b-sidebar>
     </h1>
