@@ -1,5 +1,5 @@
 <template>
-  <b-card title="Entradas" :class="listClass">
+  <b-card title="Entradas" class="results-list-full">
     <hr />
     <b-table
       id="result-table"
@@ -21,19 +21,36 @@
       }}</template>
       <template #cell(league)="data">{{ data.item.league }}</template>
       <template #cell(method)="data">{{ data.item.method }}</template>
-      <template #cell(stake)="data"
-        >$ {{ formattedDecimalValue(data.item.stake) }}</template
-      >
+      <template #cell(stake)="data">
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(data.item.stake) }}
+        </div>
+        <div v-else>-</div>
+      </template>
       <template #cell(profitLoss)="data">
-        $ {{ formattedDecimalValue(data.item.profitLoss) }}</template
-      >
+        <div :class="'result-table-value ' + getClassByResult(data.item.roi)">
+          <div v-if="showResults">
+            $ {{ formattedDecimalValue(data.item.profitLoss) }}
+          </div>
+          <div v-else>-</div>
+        </div>
+      </template>
       <template #cell(roi)="data"
-        >{{ formattedDecimalValue(data.item.roi) }}%</template
-      >
-      <template #cell(goalsScored)="data">{{ data.item.goalsScored }}</template>
-      <template #cell(goalsConceded)="data">{{
-        data.item.goalsConceded
-      }}</template>
+        ><div :class="'result-table-value ' + getClassByResult(data.item.roi)">
+          <div v-if="showResults">
+            {{ formattedDecimalValue(data.item.roi) }}%
+          </div>
+          <div v-else>-</div>
+        </div>
+      </template>
+      <template #cell(goalsScored)="data">
+        <div v-if="showResults">{{ data.item.goalsScored }}</div>
+        <div v-else>-</div>
+      </template>
+      <template #cell(goalsConceded)="data">
+        <div v-if="showResults">{{ data.item.goalsConceded }}</div>
+        <div v-else>-</div>
+      </template>
       <template #cell(editDelete)="data">
         <div class="edit-column">
           <i
@@ -94,11 +111,6 @@ export default {
   computed: {
     rows() {
       return this.bets.length;
-    },
-    listClass() {
-      return this.showResults
-        ? "results-list results-list-half"
-        : "results-list results-list-full";
     },
   },
   data() {
@@ -187,6 +199,12 @@ export default {
     mountDeleteModal() {
       this.toggleDelete = true;
     },
+    getClassByResult(result) {
+      if (this.showResults) {
+        if (result > 0) return "result-green";
+        if (result < 0) return "result-red";
+      }
+    },
   },
 };
 </script>
@@ -202,13 +220,20 @@ export default {
   padding: 30px !important;
 }
 
-.results-list-half {
-  width: 55%;
-  transition: 0.5s width;
-}
-
 #result-table {
   margin-top: 15px;
+}
+
+.result-table-value {
+  font-weight: bold;
+}
+
+.result-green {
+  color: green !important;
+}
+
+.result-red {
+  color: rgb(197, 1, 1) !important;
 }
 
 .pagination-buttons {

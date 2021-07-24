@@ -3,6 +3,11 @@
     <div class="results-header">
       <h1 class="results-header-title">Resultados</h1>
 
+      <div class="results-header-icon" @click="showResults = !showResults">
+        <i v-if="showResults" class="fa fa-eye" aria-hidden="true"></i>
+        <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
+      </div>
+
       <MonthFilter :selectedMonth="selectedMonth" @changeMonth="changeMonth" />
     </div>
 
@@ -37,6 +42,7 @@
         :infoNumber="stats.marketsCount"
         infoDescription="mercados trabalhados"
         infoIcon="fa-line-chart"
+        :showResults="showResults"
       />
 
       <CardInfo
@@ -45,6 +51,7 @@
         infoDescription="stake média"
         infoIcon="fa-percent"
         :useMoneySymbol="true"
+        :showResults="showResults"
       />
 
       <CardInfo
@@ -54,6 +61,7 @@
         infoIcon="fa-usd"
         applyColorStyle="per-result"
         :useMoneySymbol="true"
+        :showResults="showResults"
       />
 
       <CardInfo
@@ -63,6 +71,7 @@
         infoIcon="fa-percent"
         applyColorStyle="per-result"
         :usePercentageSymbol="true"
+        :showResults="showResults"
       />
     </div>
 

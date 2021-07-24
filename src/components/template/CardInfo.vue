@@ -12,8 +12,11 @@
     <b-card-text class="card-text">
       <div :class="'card-text-number ' + getClass(infoNumber)">
         <div v-if="!isLoading">
-          {{ useMoneySymbol ? "$" : "" }}
-          {{ infoNumber }}{{ usePercentageSymbol ? "%" : "" }}
+          <div v-if="shouldNotShowResults">--</div>
+          <div v-else>
+            {{ useMoneySymbol ? "$" : "" }}
+            {{ infoNumber }}{{ usePercentageSymbol ? "%" : "" }}
+          </div>
         </div>
         <div v-else>--</div>
       </div>
@@ -34,7 +37,18 @@ export default {
     "applyColorStyle",
     "useMoneySymbol",
     "usePercentageSymbol",
+    "showResults",
   ],
+  computed: {
+    shouldNotShowResults() {
+      return (
+        !this.showResults &&
+        (this.useMoneySymbol ||
+          this.usePercentageSymbol ||
+          this.applyColorStyle)
+      );
+    },
+  },
   methods: {
     getClass(number) {
       if (this.applyColorStyle === "per-result") {

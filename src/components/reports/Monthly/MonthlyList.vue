@@ -13,7 +13,25 @@
         :fields="resultFields"
         :tbody-tr-class="rowClass"
         v-if="!isLoading"
-      ></b-table>
+      >
+        <template #cell(date)="data">{{ data.item.date }}</template>
+        <template #cell(profitLossFormatted)="data">
+          <div v-if="showResults">{{ data.item.profitLossFormatted }}</div>
+          <div v-else>-</div>
+        </template>
+        <template #cell(roiFormatted)="data">
+          <div v-if="showResults">{{ data.item.roiFormatted }}</div>
+          <div v-else>-</div>
+        </template>
+        <template #cell(goalsScored)="data">
+          <div v-if="showResults">{{ data.item.goalsScored }}</div>
+          <div v-else>-</div>
+        </template>
+        <template #cell(goalsConceded)="data">
+          <div v-if="showResults">{{ data.item.goalsConceded }}</div>
+          <div v-else>-</div>
+        </template>
+      </b-table>
       <b-spinner
         v-else
         class="monthly-list-loading"
@@ -25,7 +43,7 @@
 
 <script>
 export default {
-  props: ["results", "isLoading"],
+  props: ["results", "isLoading", "showResults"],
   data() {
     return {
       resultFields: [

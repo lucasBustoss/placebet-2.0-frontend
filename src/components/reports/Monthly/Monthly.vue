@@ -2,6 +2,12 @@
   <div class="monthly-report">
     <div class="monthly-report-header">
       <h1 class="monthly-report-header-title">Resultado mensal</h1>
+
+      <div class="monthly-header-icon" @click="showResults = !showResults">
+        <i v-if="showResults" class="fa fa-eye" aria-hidden="true"></i>
+        <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
+      </div>
+
       <MonthFilter :selectedMonth="selectedMonth" @changeMonth="changeMonth" />
     </div>
 
@@ -14,6 +20,7 @@
         infoDescription="resultado mensal"
         infoIcon="fa-usd"
         :useMoneySymbol="true"
+        :showResults="showResults"
       />
       <CardInfo
         :isLoading="isLoading"
@@ -21,6 +28,7 @@
         infoDescription="gols pegos"
         infoIcon="fa-futbol-o"
         applyColorStyle="green"
+        :showResults="showResults"
       />
       <CardInfo
         :isLoading="isLoading"
@@ -28,13 +36,18 @@
         infoDescription="gols tomados"
         infoIcon="fa-futbol-o"
         applyColorStyle="red"
+        :showResults="showResults"
       />
     </div>
 
     <hr />
 
     <div class="monthly-report-content">
-      <MonthlyList :results="results" :isLoading="isLoading" />
+      <MonthlyList
+        :results="results"
+        :isLoading="isLoading"
+        :showResults="showResults"
+      />
       <div class="monthly-report-charts">
         <MonthlyChart :isLoading="isLoading" />
         <MonthlyChart :isLoading="isLoading" />
@@ -60,6 +73,7 @@ export default {
     return {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       isLoading: true,
+      showResults: false,
       results: [],
       stats: null,
     };
@@ -148,13 +162,18 @@ export default {
 
 .monthly-report-header-title {
   font-size: 1.7em;
-  width: 50%;
+  width: 13.5%;
 }
 
 .monthly-report-content {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.monthly-header-icon {
+  margin-left: 15px;
+  cursor: pointer;
 }
 
 .monthly-cards {
