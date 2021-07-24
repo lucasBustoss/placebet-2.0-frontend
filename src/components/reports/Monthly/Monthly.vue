@@ -7,6 +7,32 @@
 
     <hr />
 
+    <div class="monthly-cards">
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.profitLoss"
+        infoDescription="resultado mensal"
+        infoIcon="fa-usd"
+        :useMoneySymbol="true"
+      />
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.goalsScored"
+        infoDescription="gols pegos"
+        infoIcon="fa-futbol-o"
+        applyColorStyle="green"
+      />
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.goalsConceded"
+        infoDescription="gols tomados"
+        infoIcon="fa-futbol-o"
+        applyColorStyle="red"
+      />
+    </div>
+
+    <hr />
+
     <div class="monthly-report-content">
       <MonthlyList :results="results" :isLoading="isLoading" />
       <div class="monthly-report-charts">
@@ -21,6 +47,7 @@
 import MonthlyList from "./MonthlyList";
 import MonthlyChart from "./MonthlyChart";
 import MonthFilter from "@/components/template/MonthFilter";
+import CardInfo from "@/components/template/CardInfo";
 
 import { format, startOfMonth } from "date-fns";
 
@@ -28,16 +55,18 @@ import { showError } from "@/global";
 import api from "@/config/api";
 
 export default {
-  components: { MonthlyChart, MonthlyList, MonthFilter },
+  components: { MonthlyChart, MonthlyList, MonthFilter, CardInfo },
   data() {
     return {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       isLoading: true,
       results: [],
+      stats: null,
     };
   },
   methods: {
     async loadInfos() {
+      this.loadStats();
       await this.loadResults();
     },
     async loadResults() {
@@ -57,6 +86,36 @@ export default {
         this.isLoading = false;
       } catch (err) {
         this.isLoading = false;
+        showError(err);
+      }
+    },
+    async loadStats() {
+      try {
+        const response = await api.get("/stats", {
+          params: {
+            date: this.selectedMonth,
+          },
+        });
+
+        if (response && response.data !== null) {
+          this.stats = response.data;
+        } else {
+          this.stats = {
+            startBank: 0,
+            finalBank: 0,
+            startBankBetfair: 0,
+            finalBankBetfair: 0,
+            stake: 0,
+            profitLoss: 0,
+            roiBank: 0,
+            roiStake: 0,
+            marketsCount: 0,
+            avgStake: 0,
+            goalsScored: 0,
+            goalsConceced: 0,
+          };
+        }
+      } catch (err) {
         showError(err);
       }
     },
@@ -96,6 +155,11 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.monthly-cards {
+  display: flex;
+  justify-content: space-between;
 }
 
 .monthly-report-charts {

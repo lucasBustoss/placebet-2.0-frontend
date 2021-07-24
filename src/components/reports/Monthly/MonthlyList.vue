@@ -41,6 +41,14 @@ export default {
           key: "roiFormatted",
           label: "ROI (%)",
         },
+        {
+          key: "goalsScored",
+          label: "Gols pegos",
+        },
+        {
+          key: "goalsConceded",
+          label: "Gols tomados",
+        },
       ],
     };
   },
@@ -57,7 +65,7 @@ export default {
 <style>
 .monthly-list {
   display: flex;
-  width: 34%;
+  width: 45%;
 }
 
 .monthly-list-title {

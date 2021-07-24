@@ -15,6 +15,15 @@
         <router-link :to="{ name: 'results' }">
           <div class="sidebar-option">Resultados</div>
         </router-link>
+
+        <router-link :to="{ name: 'methods' }">
+          <div class="sidebar-option">Estratégias</div>
+        </router-link>
+
+        <router-link :to="{ name: 'leagues' }">
+          <div class="sidebar-option">Campeonatos</div>
+        </router-link>
+
         <div
           v-b-toggle.collapse-1
           class="sidebar-option"
@@ -52,12 +61,8 @@
           </router-link>
         </b-collapse>
 
-        <router-link :to="{ name: 'methods' }">
-          <div class="sidebar-option">Estratégias</div>
-        </router-link>
-
-        <router-link :to="{ name: 'leagues' }">
-          <div class="sidebar-option">Campeonatos</div>
+        <router-link :to="{ name: 'statement' }">
+          <div class="sidebar-option">Movimentações</div>
         </router-link>
       </b-sidebar>
     </h1>

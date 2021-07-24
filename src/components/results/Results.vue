@@ -32,87 +32,38 @@
     <hr />
 
     <div class="results-cards">
-      <b-card
-        border-variant="secondary"
-        class="text-center results-cards-info card-info-month-result"
-      >
-        <i
-          class="fa fa-line-chart result-card-icon result-card-icon-markets"
-          aria-hidden="true"
-        ></i>
-        <b-card-text class="result-card-text">
-          <div class="card-text-number">
-            <div v-if="!isLoading">{{ stats.marketsCount }}</div>
-            <div v-else>--</div>
-          </div>
-          <div class="card-text-stat">mercados trabalhados</div>
-        </b-card-text>
-      </b-card>
-      <b-card border-variant="secondary" class="text-center results-cards-info">
-        <i
-          class="fa fa-percent result-card-icon result-card-icon-markets"
-          aria-hidden="true"
-        ></i
-        ><b-card-text class="result-card-text">
-          <div class="card-text-number">
-            <div v-if="!isLoading">
-              $ {{ formattedDecimalValue(stats.avgStake) }}
-            </div>
-            <div v-else>--</div>
-          </div>
-          <div class="card-text-stat">stake média</div>
-        </b-card-text>
-      </b-card>
-      <b-card border-variant="secondary" class="text-center results-cards-info">
-        <i
-          :class="
-            stats.profitLoss < 0
-              ? 'fa fa-usd  card-text-number result-card-red'
-              : 'fa fa-usd  card-text-number result-card-green'
-          "
-          aria-hidden="true"
-        ></i>
-        <b-card-text class="result-card-text">
-          <div
-            :class="
-              stats.profitLoss < 0
-                ? 'card-text-number result-card-red'
-                : 'card-text-number result-card-green'
-            "
-          >
-            <div v-if="!isLoading">
-              $ {{ formattedDecimalValue(stats.profitLoss) }}
-            </div>
-            <div v-else>--</div>
-          </div>
-          <div class="card-text-stat">resultado mensal</div>
-        </b-card-text>
-      </b-card>
-      <b-card border-variant="secondary" class="text-center results-cards-info">
-        <i
-          :class="
-            stats.roiStake < 0
-              ? 'fa fa-percent  card-text-number result-card-red'
-              : 'fa fa-percent  card-text-number result-card-green'
-          "
-          aria-hidden="true"
-        ></i
-        ><b-card-text class="result-card-text">
-          <div
-            :class="
-              stats.roiStake < 0
-                ? 'card-text-number result-card-red'
-                : ' card-text-number result-card-green'
-            "
-          >
-            <div v-if="!isLoading">
-              {{ formattedDecimalValue(stats.roiStake) }}%
-            </div>
-            <div v-else>--</div>
-          </div>
-          <div class="card-text-stat">lucro sobre a stake</div>
-        </b-card-text>
-      </b-card>
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.marketsCount"
+        infoDescription="mercados trabalhados"
+        infoIcon="fa-line-chart"
+      />
+
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.avgStake"
+        infoDescription="stake média"
+        infoIcon="fa-percent"
+        :useMoneySymbol="true"
+      />
+
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.profitLoss"
+        infoDescription="resultado mensal"
+        infoIcon="fa-usd"
+        applyColorStyle="per-result"
+        :useMoneySymbol="true"
+      />
+
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="stats.roiStake"
+        infoDescription="lucro sobre a stake"
+        infoIcon="fa-percent"
+        applyColorStyle="per-result"
+        :usePercentageSymbol="true"
+      />
     </div>
 
     <hr />
@@ -137,6 +88,7 @@
 <script>
 import ResultsBetList from "./ResultsBetList";
 import MonthFilter from "../template/MonthFilter";
+import CardInfo from "../template/CardInfo";
 
 import { startOfMonth, format } from "date-fns";
 
@@ -146,7 +98,7 @@ import api from "@/config/api";
 import { mapMutations } from "vuex";
 
 export default {
-  components: { ResultsBetList, MonthFilter },
+  components: { ResultsBetList, MonthFilter, CardInfo },
   computed: {
     isLoading() {
       return this.loadingBets;
@@ -404,13 +356,13 @@ export default {
   margin-left: 10px;
 }
 
-.result-card-icon {
+/* .result-card-icon {
   font-size: 2em;
 }
 
 .result-card-icon-markets {
   color: #e9b301;
-}
+} */
 
 .result-card-green {
   color: green !important;
@@ -425,19 +377,19 @@ export default {
   justify-content: space-between;
 }
 
-.results-cards-info {
+/* .results-cards-info {
   width: 32%;
   height: 9vh;
-}
+} */
 
-.results-cards-info > .card-body {
+/* .results-cards-info > .card-body {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0;
-}
+} */
 
-.result-card-text {
+/* .result-card-text {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -454,7 +406,7 @@ export default {
 .card-text-stat {
   font-size: 0.9em;
   font-weight: 300;
-}
+} */
 
 .close {
   border: none;
