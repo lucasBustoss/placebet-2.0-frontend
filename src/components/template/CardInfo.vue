@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     getClass(number) {
-      if (this.applyColorStyle === "per-result") {
+      if (!this.shouldNotShowResults && this.applyColorStyle === "per-result") {
         if (number > 0) return "card-green";
         if (number < 0) return "card-red";
       } else if (this.applyColorStyle === "green") {
