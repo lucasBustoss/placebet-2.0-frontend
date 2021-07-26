@@ -13,16 +13,13 @@ export default {
       chartDataset: [],
     };
   },
-  mounted() {
+  async mounted() {
     this.gradient = this.$refs.canvas
       .getContext("2d")
       .createLinearGradient(0, 0, 0, 450);
     this.gradient2 = this.$refs.canvas
       .getContext("2d")
       .createLinearGradient(0, 0, 0, 450);
-
-    console.log(this.chartData1);
-    console.log(this.chartData2);
 
     if (this.chartData1) {
       this.gradient.addColorStop(0, this.chartData1.gradient1);
@@ -56,7 +53,7 @@ export default {
       this.chartDataset.push(this.chart2);
     }
 
-    this.renderChart(
+    await this.renderChart(
       {
         labels: this.labels,
         datasets: this.chartDataset,
@@ -76,6 +73,8 @@ export default {
         },
       }
     );
+
+    this.$emit("chartLoaded");
   },
 };
 </script>

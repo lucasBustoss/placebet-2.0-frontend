@@ -11,9 +11,11 @@
           :stepSize="stepSize"
           :maxSize="maxSize"
           :labels="labels"
+          @chartLoaded="toggleChartLoading"
         />
       </div>
       <b-spinner
+        v-show="isLoadingChart"
         v-else
         class="monthly-chart-loading"
         variant="secondary"
@@ -36,9 +38,18 @@ export default {
     "maxSize",
   ],
   components: { MonthlyChartComponent },
+  data() {
+    return {
+      isLoadingChart: true,
+    };
+  },
   methods: {
     teste() {
       console.log(this.chartData1);
+    },
+    toggleChartLoading() {
+      console.log("ae");
+      this.isLoadingChart = false;
     },
   },
 };
