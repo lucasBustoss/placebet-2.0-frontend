@@ -56,7 +56,7 @@
           :chartData1="chartProfitData"
           :stepSize="stats ? stats.stake : 100"
         />
-        <!-- <MonthlyChart
+        <MonthlyChart
           :isLoading="isLoading"
           chartTitle="Evolução dos gols no mês"
           :labels="chartLabels"
@@ -66,7 +66,7 @@
           "
           :stepSize="mostGoals > 20 ? '5' : mostGoals > 10 ? '2' : '1'"
           :maxSize="mostGoals + (mostGoals > 20 ? 5 : mostGoals > 10 ? 2 : 1)"
-        /> -->
+        />
       </div>
     </div>
   </div>
