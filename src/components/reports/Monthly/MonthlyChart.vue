@@ -4,7 +4,10 @@
     <hr />
 
     <div class="monthly-chart-content">
-      <div class="montly-chart-content-component" v-if="!isLoading">
+      <div
+        class="monthly-chart-content-component"
+        v-if="!isLoading && showResults"
+      >
         <MonthlyChartComponent
           :chartData1="chartData1"
           :chartData2="chartData2"
@@ -13,11 +16,16 @@
           :labels="labels"
         />
       </div>
+
       <b-spinner
-        v-else
+        v-else-if="isLoading"
         class="monthly-chart-loading"
         variant="secondary"
       ></b-spinner>
+
+      <div v-else class="monthly-chart-content-notshow">
+        Altere a visibilidade para apresentação do gráfico
+      </div>
     </div>
   </b-card>
 </template>
@@ -34,6 +42,7 @@ export default {
     "chartData2",
     "stepSize",
     "maxSize",
+    "showResults",
   ],
   components: { MonthlyChartComponent },
   data() {
@@ -71,8 +80,13 @@ export default {
   align-items: center;
 }
 
-.montly-chart-content-component {
+.monthly-chart-content-component {
   width: 100%;
+}
+
+.monthly-chart-content-notshow {
+  padding: 50px;
+  font-size: 1.6em;
 }
 
 .monthly-chart-loading {

@@ -53,19 +53,27 @@
           :isLoading="isLoading"
           chart-title="Evolução do lucro no mês"
           :labels="chartLabels"
-          :chartData1="chartProfitData"
+          :chartData1="stats && stats.marketsCount > 0 ? chartProfitData : null"
           :stepSize="stats ? stats.stake : 100"
+          :showResults="showResults"
         />
         <MonthlyChart
           :isLoading="isLoading"
           chartTitle="Evolução dos gols no mês"
           :labels="chartLabels"
-          :chartData1="stats && stats.goalsScored > 0 ? chartGoalsScored : null"
+          :chartData1="
+            stats && stats.marketsCount > 0 && stats.goalsScored > 0
+              ? chartGoalsScored
+              : null
+          "
           :chartData2="
-            stats && stats.goalsConceded > 0 ? chartGoalsConceded : null
+            stats && stats.marketsCount > 0 && stats.goalsConceded > 0
+              ? chartGoalsConceded
+              : null
           "
           :stepSize="mostGoals > 20 ? '5' : mostGoals > 10 ? '2' : '1'"
           :maxSize="mostGoals + (mostGoals > 20 ? 5 : mostGoals > 10 ? 2 : 1)"
+          :showResults="showResults"
         />
       </div>
     </div>

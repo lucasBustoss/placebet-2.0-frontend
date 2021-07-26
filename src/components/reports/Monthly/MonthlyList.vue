@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     rowClass(item, type) {
-      if (!item || type !== "row") return;
+      if (!item || type !== "row" || !this.showResults) return;
       if (Number(item.profitLoss) > 0) return "table-success";
       if (Number(item.profitLoss) < 0) return "table-danger";
     },
