@@ -16,10 +16,15 @@ export default new Vuex.Store({
 
       if (user) {
         api.defaults.headers.common['Authorization'] = `${user.token}`;
+        api.defaults.headers.common['AppKey'] = `${user.appKey}`;
         api.defaults.headers.common['user_id'] = `${user.user_id}`;
+
+        console.log('to aqui no state')
+        console.log(user.appKey)
 
       } else {
         delete api.defaults.headers.common['Authorization'];
+        delete api.defaults.headers.common['AppKey'];
         delete api.defaults.headers.common['user_id'];
         state.isMenuVisible = false;
       }
