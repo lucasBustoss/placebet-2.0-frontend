@@ -1,11 +1,17 @@
 <template>
   <b-card class="monthly-chart">
-    <h2 class="monthly-chart-title">Evolução do lucro no mês</h2>
+    <h2 class="monthly-chart-title">{{ chartTitle }}</h2>
     <hr />
 
     <div class="monthly-chart-content">
       <div class="montly-chart-content-component" v-if="!isLoading">
-        <MonthlyChartComponent />
+        <MonthlyChartComponent
+          :chartData1="chartData1"
+          :chartData2="chartData2"
+          :stepSize="stepSize"
+          :maxSize="maxSize"
+          :labels="labels"
+        />
       </div>
       <b-spinner
         v-else
@@ -13,17 +19,28 @@
         variant="secondary"
       ></b-spinner>
     </div>
-
-    <!-- <Bar :chartdata="chartdata" :options="options" /> -->
   </b-card>
 </template>
 
 <script>
-import MonthlyChartComponent from "./Charts/Monthly.vue";
+import MonthlyChartComponent from "./Charts/Monthly";
 
 export default {
-  props: ["isLoading"],
+  props: [
+    "chartTitle",
+    "isLoading",
+    "labels",
+    "chartData1",
+    "chartData2",
+    "stepSize",
+    "maxSize",
+  ],
   components: { MonthlyChartComponent },
+  methods: {
+    teste() {
+      console.log(this.chartData1);
+    },
+  },
 };
 </script>
 

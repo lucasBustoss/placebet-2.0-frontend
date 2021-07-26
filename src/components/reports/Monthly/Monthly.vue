@@ -16,7 +16,7 @@
     <div class="monthly-cards">
       <CardInfo
         :isLoading="isLoading"
-        :infoNumber="stats.profitLoss"
+        :infoNumber="stats ? stats.profitLoss : 0"
         infoDescription="resultado mensal"
         infoIcon="fa-usd"
         :useMoneySymbol="true"
@@ -24,7 +24,7 @@
       />
       <CardInfo
         :isLoading="isLoading"
-        :infoNumber="stats.goalsScored"
+        :infoNumber="stats ? stats.goalsScored : 0"
         infoDescription="gols pegos"
         infoIcon="fa-futbol-o"
         applyColorStyle="green"
@@ -32,7 +32,7 @@
       />
       <CardInfo
         :isLoading="isLoading"
-        :infoNumber="stats.goalsConceded"
+        :infoNumber="stats ? stats.goalsConceded : 0"
         infoDescription="gols tomados"
         infoIcon="fa-futbol-o"
         applyColorStyle="red"
@@ -49,8 +49,24 @@
         :showResults="showResults"
       />
       <div class="monthly-report-charts">
-        <MonthlyChart :isLoading="isLoading" />
-        <MonthlyChart :isLoading="isLoading" />
+        <MonthlyChart
+          :isLoading="isLoading"
+          chart-title="Evolução do lucro no mês"
+          :labels="chartLabels"
+          :chartData1="chartProfitData"
+          :stepSize="stats ? stats.stake : 100"
+        />
+        <MonthlyChart
+          :isLoading="isLoading"
+          chartTitle="Evolução dos gols no mês"
+          :labels="chartLabels"
+          :chartData1="stats && stats.goalsScored > 0 ? chartGoalsScored : null"
+          :chartData2="
+            stats && stats.goalsConceded > 0 ? chartGoalsConceded : null
+          "
+          :stepSize="mostGoals > 20 ? '5' : mostGoals > 10 ? '2' : '1'"
+          :maxSize="mostGoals + (mostGoals > 20 ? 5 : mostGoals > 10 ? 2 : 1)"
+        />
       </div>
     </div>
   </div>
@@ -69,6 +85,128 @@ import api from "@/config/api";
 
 export default {
   components: { MonthlyChart, MonthlyList, MonthFilter, CardInfo },
+  computed: {
+    chartProfitData() {
+      const chartData = {
+        labelName: "Evolução do lucro mensal",
+        data: this.profitEvolutionData,
+        borderColor: "#ffc107",
+        pointBorderColor: "rgba(255,193,7,0.5)",
+        gradient1: "rgba(255,193,7,0.5)",
+        gradient2: "rgba(255,193,7,0.25)",
+        gradient3: "rgba(255,193,7,0)",
+      };
+
+      return chartData;
+    },
+    chartGoalsScored() {
+      const chartData = {
+        labelName: "Gols pegos",
+        data: this.goalsScoredData,
+        borderColor: "#00af17",
+        pointBorderColor: "rgba(0,175,23,0.5)",
+        gradient1: "rgba(0,175,23,0.5)",
+        gradient2: "rgba(0,175,23,0.25)",
+        gradient3: "rgba(0,175,23,0)",
+      };
+
+      return chartData;
+    },
+    chartGoalsConceded() {
+      const chartData = {
+        labelName: "Gols tomados",
+        data: this.goalsConcededData,
+        borderColor: "#af1400",
+        pointBorderColor: "rgba(175,20,0,0.5)",
+        gradient1: "rgba(175,20,0,0.5)",
+        gradient2: "rgba(175,20,0,0.25)",
+        gradient3: "rgba(175,20,0,0)",
+      };
+
+      return chartData;
+    },
+    chartLabels() {
+      const labels = [];
+
+      if (this.monthly && this.monthly.profitEvolution.length > 0)
+        for (
+          let index = 0;
+          index < this.monthly.profitEvolution.length;
+          index++
+        ) {
+          if (
+            index % 4 !== 0 &&
+            index + 1 !== this.monthly.profitEvolution.length
+          ) {
+            labels.push("");
+            continue;
+          }
+
+          const item = this.monthly.profitEvolution[index];
+
+          labels.push(item.date);
+        }
+
+      return labels;
+    },
+    profitEvolutionData() {
+      const data = [];
+
+      if (this.monthly && this.monthly.profitEvolution.length > 0)
+        for (
+          let index = 0;
+          index < this.monthly.profitEvolution.length;
+          index++
+        ) {
+          const item = this.monthly.profitEvolution[index];
+
+          data.push(item.profitLoss);
+        }
+
+      return data;
+    },
+    goalsScoredData() {
+      const data = [];
+
+      if (this.monthly && this.monthly.goalsEvolution.length > 0)
+        for (
+          let index = 0;
+          index < this.monthly.goalsEvolution.length;
+          index++
+        ) {
+          const item = this.monthly.goalsEvolution[index];
+
+          data.push(item.goalsScored);
+        }
+
+      return data;
+    },
+    goalsConcededData() {
+      const data = [];
+
+      if (this.monthly && this.monthly.goalsEvolution.length > 0)
+        for (
+          let index = 0;
+          index < this.monthly.goalsEvolution.length;
+          index++
+        ) {
+          const item = this.monthly.goalsEvolution[index];
+
+          data.push(item.goalsConceded);
+        }
+
+      return data;
+    },
+    mostGoals() {
+      if (this.stats) {
+        if (this.stats.goalsScored > this.stats.goalsConceded)
+          return Number(this.stats.goalsScored);
+        return Number(this.stats.goalsConceded);
+      } else {
+        return 30;
+      }
+    },
+  },
   data() {
     return {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
@@ -76,11 +214,13 @@ export default {
       showResults: false,
       results: [],
       stats: null,
+      monthly: null,
     };
   },
   methods: {
     async loadInfos() {
       this.loadStats();
+      this.loadMonthlyData();
       await this.loadResults();
     },
     async loadResults() {
@@ -130,6 +270,26 @@ export default {
           };
         }
       } catch (err) {
+        showError(err);
+      }
+    },
+    async loadMonthlyData() {
+      try {
+        this.isLoading = true;
+
+        const response = await api.get("/reports/monthly", {
+          params: {
+            date: this.selectedMonth,
+          },
+        });
+
+        if (response && response.data !== undefined) {
+          this.monthly = response.data;
+        }
+
+        this.isLoading = false;
+      } catch (err) {
+        this.isLoading = false;
         showError(err);
       }
     },

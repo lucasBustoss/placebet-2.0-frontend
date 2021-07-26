@@ -3,10 +3,14 @@ import { Line } from "vue-chartjs";
 
 export default {
   extends: Line,
+  props: ["labels", "chartData1", "chartData2", "stepSize", "maxSize"],
   data() {
     return {
       gradient: null,
       gradient2: null,
+      chart1: {},
+      chart2: {},
+      chartDataset: [],
     };
   },
   mounted() {
@@ -17,47 +21,60 @@ export default {
       .getContext("2d")
       .createLinearGradient(0, 0, 0, 450);
 
-    this.gradient.addColorStop(0, "rgba(255, 0,0, 0.5)");
-    this.gradient.addColorStop(0.5, "rgba(255, 0, 0, 0.25)");
-    this.gradient.addColorStop(1, "rgba(255, 0, 0, 0)");
+    console.log(this.chartData1);
+    console.log(this.chartData2);
 
-    this.gradient2.addColorStop(0, "rgba(0, 231, 255, 0.9)");
-    this.gradient2.addColorStop(0.5, "rgba(0, 231, 255, 0.25)");
-    this.gradient2.addColorStop(1, "rgba(0, 231, 255, 0)");
+    if (this.chartData1) {
+      this.gradient.addColorStop(0, this.chartData1.gradient1);
+      this.gradient.addColorStop(0.5, this.chartData1.gradient2);
+      this.gradient.addColorStop(1, this.chartData1.gradient3);
+
+      this.chart1.label = this.chartData1.labelName;
+      this.chart1.borderColor = this.chartData1.borderColor;
+      this.chart1.pointBackgroundColor = "white";
+      this.chart1.borderWidth = 1;
+      this.chart1.pointBorderColor = this.chartData1.pointBorderColor;
+      this.chart1.backgroundColor = this.gradient;
+      this.chart1.data = this.chartData1.data;
+
+      this.chartDataset.push(this.chart1);
+    }
+
+    if (this.chartData2) {
+      this.gradient2.addColorStop(0, this.chartData2.gradient1);
+      this.gradient2.addColorStop(0.5, this.chartData2.gradient2);
+      this.gradient2.addColorStop(1, this.chartData2.gradient3);
+
+      this.chart2.label = this.chartData2.labelName;
+      this.chart2.borderColor = this.chartData2.borderColor;
+      this.chart2.pointBackgroundColor = "white";
+      this.chart2.borderWidth = 1;
+      this.chart2.pointBorderColor = this.chartData2.pointBorderColor;
+      this.chart2.backgroundColor = this.gradient2;
+      this.chart2.data = this.chartData2.data;
+
+      this.chartDataset.push(this.chart2);
+    }
 
     this.renderChart(
       {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
-        datasets: [
-          {
-            label: "Data One",
-            borderColor: "#FC2525",
-            pointBackgroundColor: "white",
-            borderWidth: 1,
-            pointBorderColor: "white",
-            backgroundColor: this.gradient,
-            data: [40, 39, 10, 40, 39, 80, 40],
-          },
-          {
-            label: "Data Two",
-            borderColor: "#05CBE1",
-            pointBackgroundColor: "white",
-            pointBorderColor: "white",
-            borderWidth: 1,
-            backgroundColor: this.gradient2,
-            data: [60, 55, 32, 10, 2, 12, 53],
-          },
-        ],
+        labels: this.labels,
+        datasets: this.chartDataset,
       },
-      { responsive: true, maintainAspectRatio: false }
+      {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                stepSize: this.stepSize,
+                max: this.maxSize,
+              },
+            },
+          ],
+        },
+      }
     );
   },
 };

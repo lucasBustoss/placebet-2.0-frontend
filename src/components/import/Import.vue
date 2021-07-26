@@ -87,9 +87,6 @@ export default {
 
         await api.post("/bets", { bets });
 
-        const json = JSON.stringify(bets);
-        console.log(json);
-
         this.$router.push({ name: "results" });
       } catch (err) {
         console.log(err);

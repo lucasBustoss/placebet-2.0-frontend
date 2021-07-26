@@ -346,11 +346,11 @@ export default {
 
 .buttons > .button-import:focus,
 .results-options > button:focus {
-  border: 1px solid #ffc107;
+  border: 1px solid #ffc107 !important;
 }
 
 .buttons > .button-share:focus {
-  border: 1px solid #198754;
+  border: 1px solid #198754 !important;
 }
 
 .results-options > .options-date-selector:focus {
