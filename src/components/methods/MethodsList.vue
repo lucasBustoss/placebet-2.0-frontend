@@ -95,7 +95,6 @@ export default {
     showDeleteModal(data) {
       this.method = data.item;
 
-      console.log(this.method);
       this.$bvModal.show("method-delete-modal");
     },
     insertMethod(name) {

@@ -564,7 +564,6 @@ export default {
       }
     },
     getGoalsScored(bet) {
-      // console.log(bet.goalsScored);
       return bet.goalsScored || "0";
     },
     getGoalsConceded(bet) {

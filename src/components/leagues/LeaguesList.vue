@@ -95,7 +95,6 @@ export default {
     showDeleteModal(data) {
       this.league = data.item;
 
-      console.log(this.league);
       this.$bvModal.show("league-delete-modal");
     },
     insertLeague(name) {

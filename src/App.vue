@@ -2,7 +2,9 @@
   <div>
     <Header />
     <Menu />
-    <Loading v-if="validatingToken" />
+    <div v-if="validatingToken" class="loading-spinner">
+      <b-spinner variant="secondary"></b-spinner>
+    </div>
     <Content v-else />
   </div>
 </template>
@@ -14,7 +16,6 @@ import { mapMutations } from "vuex";
 
 import { userKey } from "@/global";
 
-import Loading from "./components/template/Loading";
 import Header from "./components/template/Header";
 import Menu from "./components/template/Menu";
 import Content from "./components/template/Content";
@@ -25,7 +26,6 @@ export default {
     Header,
     Content,
     Menu,
-    Loading,
   },
   data() {
     return {
@@ -35,7 +35,6 @@ export default {
   methods: {
     ...mapMutations(["setUser"]),
     async validateToken() {
-      console.log("validando");
       this.validatingToken = true;
 
       const json = localStorage.getItem(userKey);
@@ -58,7 +57,6 @@ export default {
         this.$router.push({ name: "auth" }).catch(() => {});
       }
 
-      console.log("fim");
       this.validatingToken = false;
     },
   },
@@ -76,5 +74,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.loading-spinner {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  width: 100% !important;
+  justify-content: center;
+  align-items: center;
 }
 </style>

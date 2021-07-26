@@ -85,14 +85,12 @@ export default {
       try {
         this.loadingImport = true;
 
-        console.log("salvando");
         await api.post("/bets", { bets });
 
         const json = JSON.stringify(bets);
         console.log(json);
 
         this.$router.push({ name: "results" });
-        console.log("salvei");
       } catch (err) {
         console.log(err);
         showError(err);
