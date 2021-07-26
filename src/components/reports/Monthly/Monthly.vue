@@ -56,7 +56,7 @@
           :chartData1="chartProfitData"
           :stepSize="stats ? stats.stake : 100"
         />
-        <MonthlyChart
+        <!-- <MonthlyChart
           :isLoading="isLoading"
           chartTitle="Evolução dos gols no mês"
           :labels="chartLabels"
@@ -66,7 +66,7 @@
           "
           :stepSize="mostGoals > 20 ? '5' : mostGoals > 10 ? '2' : '1'"
           :maxSize="mostGoals + (mostGoals > 20 ? 5 : mostGoals > 10 ? 2 : 1)"
-        />
+        /> -->
       </div>
     </div>
   </div>
@@ -219,14 +219,16 @@ export default {
   },
   methods: {
     async loadInfos() {
-      this.loadStats();
-      this.loadMonthlyData();
+      this.isLoading = true;
+
       await this.loadResults();
+      await this.loadStats();
+      await this.loadMonthlyData();
+
+      this.isLoading = false;
     },
     async loadResults() {
       try {
-        this.isLoading = true;
-
         const response = await api.get("/bets/resultsPerDate", {
           params: {
             date: this.selectedMonth,
@@ -236,10 +238,7 @@ export default {
         if (response && response.data !== undefined) {
           this.results = response.data;
         }
-
-        this.isLoading = false;
       } catch (err) {
-        this.isLoading = false;
         showError(err);
       }
     },
@@ -270,13 +269,12 @@ export default {
           };
         }
       } catch (err) {
+        this.isLoading = false;
         showError(err);
       }
     },
     async loadMonthlyData() {
       try {
-        this.isLoading = true;
-
         const response = await api.get("/reports/monthly", {
           params: {
             date: this.selectedMonth,
@@ -286,8 +284,6 @@ export default {
         if (response && response.data !== undefined) {
           this.monthly = response.data;
         }
-
-        this.isLoading = false;
       } catch (err) {
         this.isLoading = false;
         showError(err);
