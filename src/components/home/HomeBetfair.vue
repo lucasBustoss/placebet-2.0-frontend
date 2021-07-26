@@ -13,20 +13,35 @@
       :fields="resultFields"
     >
       <template #cell(month)="props">{{ props.item.month }}</template>
-      <template #cell(initialBank)="props"
-        >$ {{ formattedDecimalValue(props.item.startBankBetfair) }}</template
-      >
-      <template #cell(profitLoss)="props"
-        >$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
+      <template #cell(initialBank)="props">
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.startBankBetfair) }}
+        </div>
+        <div v-else>-</div>
+      </template>
+      <template #cell(profitLoss)="props">
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.profitLoss) }}
+        </div>
+        <div v-else>-</div></template
       >
       <template #cell(withdraw)="props">
-        $ {{ formattedDecimalValue(props.item.betfairWithdraws) }}</template
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.betfairWithdraws) }}
+        </div>
+        <div v-else>-</div></template
       >
       <template #cell(deposit)="props"
-        >$ {{ formattedDecimalValue(props.item.betfairDeposits) }}</template
+        ><div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.betfairDeposits) }}
+        </div>
+        <div v-else>-</div></template
       >
       <template #cell(finalBank)="props"
-        >$ {{ formattedDecimalValue(props.item.finalBankBetfair) }}</template
+        ><div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.finalBankBetfair) }}
+        </div>
+        <div v-else>-</div></template
       >
     </b-table>
   </b-card>
@@ -34,7 +49,7 @@
 
 <script>
 export default {
-  props: ["betfairStats", "formattedDecimalValue"],
+  props: ["betfairStats", "formattedDecimalValue", "showResults"],
   data() {
     return {
       resultsByMonth: [

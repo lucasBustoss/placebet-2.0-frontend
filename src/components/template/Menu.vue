@@ -61,7 +61,7 @@
           </router-link>
         </b-collapse>
 
-        <router-link :to="{ name: 'statement' }">
+        <router-link :to="{ name: 'statements' }">
           <div class="sidebar-option">Movimentações</div>
         </router-link>
       </b-sidebar>

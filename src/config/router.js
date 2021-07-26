@@ -59,6 +59,12 @@ const routes = [
     path: '/reports/methods',
     component: ReportMethods
   },
+  {
+    name: 'statements',
+    path: '/',
+    component: Home
+    //Fazer!!!
+  },
 ]
 
 export default new VueRouter({

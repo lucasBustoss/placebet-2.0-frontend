@@ -1,14 +1,26 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
+    <div class="home-header">
+      <h1 class="home-header-title">Home</h1>
+
+      <div class="home-header-icon" @click="showResults = !showResults">
+        <i v-if="showResults" class="fa fa-eye" aria-hidden="true"></i>
+        <i v-else class="fa fa-eye-slash" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <hr />
+
     <div class="home-lists">
       <HomeBank
         :bankStats="bankStats"
         :formattedDecimalValue="formattedDecimalValue"
+        :showResults="showResults"
       />
       <HomeBetfair
         :betfairStats="betfairStats"
         :formattedDecimalValue="formattedDecimalValue"
+        :showResults="showResults"
       />
     </div>
   </div>
@@ -29,6 +41,7 @@ export default {
     return {
       bankStats: [],
       betfairStats: [],
+      showResults: false,
     };
   },
   methods: {
@@ -86,8 +99,22 @@ export default {
   padding: 20px;
 }
 
-.home > h1 {
-  margin-left: 10px;
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: 1em;
+  width: 30%;
+}
+
+.home-header-title {
+  font-size: 1.7em;
+  width: 13.5%;
+}
+
+.home-header-icon {
+  margin-left: 15px;
+  cursor: pointer;
 }
 
 .home-lists {

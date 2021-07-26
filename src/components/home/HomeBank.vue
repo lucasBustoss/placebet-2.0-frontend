@@ -8,32 +8,52 @@
       :items="bankStats"
       :fields="resultFields"
     >
-      <template #cell(month)="props">{{ props.item.month }}</template>
+      <template #cell(month)="props">
+        {{ props.item.month }}
+      </template>
       <template #cell(initialBank)="props"
-        >$ {{ formattedDecimalValue(props.item.startBank) }}</template
-      >
-      <template #cell(profitLoss)="props"
-        >$ {{ formattedDecimalValue(props.item.profitLoss) }}</template
-      >
+        ><div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.startBank) }}
+        </div>
+        <div v-else>-</div>
+      </template>
+      <template #cell(profitLoss)="props">
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.profitLoss) }}
+        </div>
+        <div v-else>-</div>
+      </template>
       <template #cell(withdraw)="props">
-        $ {{ formattedDecimalValue(props.item.bankWithdraws) }}</template
-      >
+        <div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.bankWithdraws) }}
+        </div>
+        <div v-else>-</div>
+      </template>
       <template #cell(deposit)="props"
-        >$ {{ formattedDecimalValue(props.item.bankDeposits) }}</template
-      >
+        ><div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.bankDeposits) }}
+        </div>
+        <div v-else>-</div>
+      </template>
       <template #cell(finalBank)="props"
-        >$ {{ formattedDecimalValue(props.item.finalBank) }}</template
-      >
+        ><div v-if="showResults">
+          $ {{ formattedDecimalValue(props.item.finalBank) }}
+        </div>
+        <div v-else>-</div>
+      </template>
       <template #cell(roi)="props"
-        >{{ formattedDecimalValue(props.item.roi) }}%</template
-      >
+        ><div v-if="showResults">
+          {{ formattedDecimalValue(props.item.roi) }}%
+        </div>
+        <div v-else>-</div>
+      </template>
     </b-table>
   </b-card>
 </template>
 
 <script>
 export default {
-  props: ["bankStats", "formattedDecimalValue"],
+  props: ["bankStats", "formattedDecimalValue", "showResults"],
   data() {
     return {
       resultFields: [
