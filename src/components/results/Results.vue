@@ -49,7 +49,7 @@
         :isLoading="isLoading"
         :infoNumber="stats.avgStake"
         infoDescription="stake média"
-        infoIcon="fa-percent"
+        infoIcon="fa-money"
         :useMoneySymbol="true"
         :showResults="showResults"
       />
