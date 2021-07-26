@@ -65,7 +65,7 @@ export default {
 <style>
 .monthly-chart {
   display: flex;
-  width: 95%;
+  width: 98.5%;
   background: #fff;
   padding-bottom: 30px;
 }
