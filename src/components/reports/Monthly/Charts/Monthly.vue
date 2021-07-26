@@ -4,6 +4,26 @@ import { Line } from "vue-chartjs";
 export default {
   extends: Line,
   props: ["labels", "chartData1", "chartData2", "stepSize", "maxSize"],
+  watch: {
+    chart1: {
+      deep: true,
+      handler() {
+        this.render();
+      },
+    },
+    chart2: {
+      deep: true,
+      handler() {
+        this.render();
+      },
+    },
+    chartDataset: {
+      deep: true,
+      handler() {
+        this.render();
+      },
+    },
+  },
   data() {
     return {
       gradient: null,
@@ -12,6 +32,30 @@ export default {
       chart2: {},
       chartDataset: [],
     };
+  },
+  methods: {
+    render() {
+      this.renderChart(
+        {
+          labels: this.labels,
+          datasets: this.chartDataset,
+        },
+        {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  stepSize: this.stepSize,
+                  max: this.maxSize,
+                },
+              },
+            ],
+          },
+        }
+      );
+    },
   },
   async mounted() {
     this.gradient = this.$refs.canvas
@@ -52,29 +96,6 @@ export default {
 
       this.chartDataset.push(this.chart2);
     }
-
-    await this.renderChart(
-      {
-        labels: this.labels,
-        datasets: this.chartDataset,
-      },
-      {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                stepSize: this.stepSize,
-                max: this.maxSize,
-              },
-            },
-          ],
-        },
-      }
-    );
-
-    this.$emit("chartLoaded");
   },
 };
 </script>
