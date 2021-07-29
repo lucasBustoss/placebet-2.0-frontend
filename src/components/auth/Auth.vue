@@ -54,7 +54,19 @@ export default {
           this.setUser(response.data);
 
           localStorage.setItem(userKey, JSON.stringify(response.data));
-          this.$router.push({ name: "home" });
+
+          console.log(this.user.username);
+
+          if (!response.data.user_id) {
+            this.$router.push({
+              name: "createProfile",
+              params: { username: this.user.username },
+            });
+          } else {
+            this.$router.push({
+              name: "home",
+            });
+          }
         }
       } catch (e) {
         showError(e);

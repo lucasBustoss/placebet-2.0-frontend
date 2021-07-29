@@ -15,7 +15,12 @@
           <div v-if="shouldNotShowResults">--</div>
           <div v-else>
             {{ useMoneySymbol ? "$" : "" }}
-            {{ infoNumber }}{{ usePercentageSymbol ? "%" : "" }}
+            {{
+              useFormattedDecimalValue
+                ? formattedDecimalValue(infoNumber)
+                : infoNumber
+            }}
+            {{ usePercentageSymbol ? "%" : "" }}
           </div>
         </div>
         <div v-else>--</div>
@@ -37,6 +42,7 @@ export default {
     "applyColorStyle",
     "useMoneySymbol",
     "usePercentageSymbol",
+    "useFormattedDecimalValue",
     "showResults",
   ],
   computed: {
@@ -61,6 +67,10 @@ export default {
       }
 
       return "";
+    },
+    formattedDecimalValue(value) {
+      const numberValue = Number(value);
+      return numberValue.toFixed(2);
     },
   },
 };

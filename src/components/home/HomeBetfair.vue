@@ -12,7 +12,9 @@
       :items="betfairStats"
       :fields="resultFields"
     >
-      <template #cell(month)="props">{{ props.item.month }}</template>
+      <template #cell(month)="props">{{
+        props.item.monthDescription
+      }}</template>
       <template #cell(initialBank)="props">
         <div v-if="showResults">
           $ {{ formattedDecimalValue(props.item.startBankBetfair) }}

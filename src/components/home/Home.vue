@@ -10,6 +10,40 @@
     </div>
 
     <hr />
+    <div class="home-header-card">
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="actualBankStats ? actualBankStats.profitLoss : '--'"
+        infoDescription="resultado mensal"
+        infoIcon="fa-usd"
+        applyColorStyle="per-result"
+        :useMoneySymbol="true"
+        :useFormattedDecimalValue="true"
+        :showResults="showResults"
+      />
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="actualBankStats ? actualBankStats.roi : '--'"
+        infoDescription="ROI sobre a banca mensal"
+        infoIcon="fa-percent"
+        applyColorStyle="per-result"
+        :usePercentageSymbol="true"
+        :useFormattedDecimalValue="true"
+        :showResults="showResults"
+      />
+      <CardInfo
+        :isLoading="isLoading"
+        :infoNumber="
+          actualBetfairStats ? actualBetfairStats.finalBankBetfair : '--'
+        "
+        infoDescription="banca na Betfair"
+        infoIcon="fa-money"
+        :useMoneySymbol="true"
+        :useFormattedDecimalValue="true"
+        :showResults="showResults"
+      />
+    </div>
+    <hr />
 
     <div class="home-lists">
       <HomeBank
@@ -29,6 +63,7 @@
 <script>
 import HomeBank from "./HomeBank";
 import HomeBetfair from "./HomeBetfair";
+import CardInfo from "../template/CardInfo";
 
 import { format } from "date-fns";
 
@@ -36,12 +71,29 @@ import { showError } from "@/global";
 import api from "@/config/api";
 
 export default {
-  components: { HomeBank, HomeBetfair },
+  components: { HomeBank, HomeBetfair, CardInfo },
+  computed: {
+    actualBankStats() {
+      const actual = this.bankStats.filter(
+        (bs) => bs.month === format(new Date(), "MM-yyyy")
+      );
+
+      return actual[0];
+    },
+    actualBetfairStats() {
+      const actual = this.betfairStats.filter(
+        (bs) => bs.month === format(new Date(), "MM-yyyy")
+      );
+
+      return actual[0];
+    },
+  },
   data() {
     return {
       bankStats: [],
       betfairStats: [],
       showResults: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -113,8 +165,13 @@ export default {
 }
 
 .home-header-icon {
-  margin-left: 15px;
+  margin-left: 25px;
   cursor: pointer;
+}
+
+.home-header-card {
+  display: flex;
+  justify-content: space-between;
 }
 
 .home-lists {

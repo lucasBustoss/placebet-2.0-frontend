@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       validatingToken: true,
+      // validatingToken: false,
     };
   },
   methods: {

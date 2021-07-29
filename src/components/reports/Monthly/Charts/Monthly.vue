@@ -53,11 +53,6 @@ export default {
       this.chartDataset.push(this.chart2);
     }
 
-    console.log(this.labels);
-    console.log(this.chartDataset);
-    console.log(this.stepSize);
-    console.log(this.maxSize);
-
     this.renderChart(
       {
         labels: this.labels,

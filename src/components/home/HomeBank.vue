@@ -9,7 +9,7 @@
       :fields="resultFields"
     >
       <template #cell(month)="props">
-        {{ props.item.month }}
+        {{ props.item.monthDescription }}
       </template>
       <template #cell(initialBank)="props"
         ><div v-if="showResults">

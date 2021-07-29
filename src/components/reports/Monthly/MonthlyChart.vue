@@ -55,7 +55,6 @@ export default {
       console.log(this.chartData1);
     },
     toggleChartLoading() {
-      console.log("ae");
       this.isLoadingChart = false;
     },
   },
