@@ -34,13 +34,13 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser"]),
+    ...mapMutations(["setUser", "setHeaders"]),
     async validateToken() {
       this.validatingToken = true;
 
       const json = localStorage.getItem(userKey);
       const userData = JSON.parse(json);
-      this.$store.commit("setUser", userData);
+      this.$store.commit("setUser", userData.user);
 
       if (!userData) {
         this.validatingToken = false;
@@ -51,8 +51,10 @@ export default {
       const res = await api.post("/sessions/validate", userData);
 
       if (res.data && res.data.message) {
-        this.setUser(userData);
+        this.setHeaders(userData);
+        this.setUser(userData.user);
       } else {
+        this.$store.commit("setHeaders", null);
         this.$store.commit("setUser", null);
         localStorage.removeItem(userKey);
         this.$router.push({ name: "auth" }).catch(() => {});

@@ -43,7 +43,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser"]),
+    ...mapMutations(["setHeaders", "setUser"]),
     async submit(event) {
       try {
         event.preventDefault();
@@ -51,18 +51,21 @@ export default {
         const response = await api.post("/sessions/auth", this.user);
 
         if (response.status === 200) {
-          this.setUser(response.data);
+          this.setHeaders(response.data);
 
           localStorage.setItem(userKey, JSON.stringify(response.data));
 
-          console.log(this.user.username);
-
-          if (!response.data.user_id) {
+          if (!response.data.user) {
             this.$router.push({
               name: "createProfile",
-              params: { username: this.user.username },
+              params: {
+                username: this.user.username,
+                appKey: response.data.appKey,
+              },
             });
           } else {
+            this.setUser(response.data.user);
+
             this.$router.push({
               name: "home",
             });

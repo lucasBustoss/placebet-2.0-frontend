@@ -51,9 +51,6 @@ export default {
     };
   },
   methods: {
-    teste() {
-      console.log(this.chartData1);
-    },
     toggleChartLoading() {
       this.isLoadingChart = false;
     },

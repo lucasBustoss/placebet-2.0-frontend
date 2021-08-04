@@ -115,7 +115,9 @@ export default {
   },
   data() {
     return {
-      showResults: false,
+      showResults: this.$store.state.defaultVisibility
+        ? this.$store.state.defaultVisibility
+        : 0,
       loadingImport: false,
       loadingBets: false,
       bets: [],
@@ -128,6 +130,10 @@ export default {
   },
   methods: {
     ...mapMutations(["setBetsToImport"]),
+    teste() {
+      console.log(this.showResults);
+      console.log(this.$store.state.defaultVisibility);
+    },
     async loadInfos() {
       this.loadMethods();
       this.loadLeagues();
