@@ -52,7 +52,14 @@ export default {
 
       if (res.data && res.data.message) {
         this.setHeaders(userData);
-        this.setUser(userData.user);
+
+        const userResponse = await api.get("/users", {
+          params: {
+            user_id: userData.user.id,
+          },
+        });
+
+        this.setUser(userResponse.data);
       } else {
         this.$store.commit("setHeaders", null);
         this.$store.commit("setUser", null);

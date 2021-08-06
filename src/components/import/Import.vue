@@ -7,7 +7,6 @@
       :bets="betsToImport"
       :methods="methods"
       :leagues="leagues"
-      :formattedDecimalValue="formattedDecimalValue"
       :getDateFormatted="getDateFormatted"
       :loadingImport="loadingImport"
       @importBets="importBets"
@@ -76,10 +75,6 @@ export default {
     },
     getDateFormatted(date) {
       return format(parseISO(date), "dd/MM/yyyy");
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
     async importBets(bets) {
       try {

@@ -17,31 +17,31 @@
       }}</template>
       <template #cell(initialBank)="props">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.startBankBetfair) }}
+          $ {{ formatDecimal(decimalType, props.item.startBankBetfair) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(profitLoss)="props">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.profitLoss) }}
+          $ {{ formatDecimal(decimalType, props.item.profitLoss) }}
         </div>
         <div v-else>-</div></template
       >
       <template #cell(withdraw)="props">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.betfairWithdraws) }}
+          $ {{ formatDecimal(decimalType, props.item.betfairWithdraws) }}
         </div>
         <div v-else>-</div></template
       >
       <template #cell(deposit)="props"
         ><div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.betfairDeposits) }}
+          $ {{ formatDecimal(decimalType, props.item.betfairDeposits) }}
         </div>
         <div v-else>-</div></template
       >
       <template #cell(finalBank)="props"
         ><div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.finalBankBetfair) }}
+          $ {{ formatDecimal(decimalType, props.item.finalBankBetfair) }}
         </div>
         <div v-else>-</div></template
       >
@@ -50,8 +50,11 @@
 </template>
 
 <script>
+import { mixin } from "@/mixins";
+
 export default {
-  props: ["betfairStats", "formattedDecimalValue", "showResults"],
+  mixins: [mixin],
+  props: ["betfairStats", "moneySymbol", "decimalType", "showResults"],
   data() {
     return {
       resultsByMonth: [

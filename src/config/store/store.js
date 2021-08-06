@@ -13,6 +13,18 @@ export default new Vuex.Store({
     money: 1,
     defaultVisibility: 0
   },
+  getters: {
+    moneySymbol(state) {
+      return state.currency === "brl"
+        ? "R$"
+        : state.currency === "eur"
+          ? "€"
+          : "$";
+    },
+    decimalType(state) {
+      return state.money;
+    },
+  },
   mutations: {
     setHeaders(state, info) {
       if (info) {
@@ -28,8 +40,6 @@ export default new Vuex.Store({
       state.user = user;
 
       if (user) {
-        console.log(user)
-
         state.currency = user.currencyType;
         state.money = user.moneyType;
         state.defaultVisibility = user.visibility;

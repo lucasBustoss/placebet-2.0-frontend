@@ -217,7 +217,8 @@
       </template>
       <template #cell(result)="data"
         ><div :class="getResultClass(data.item.profitLoss)">
-          $ {{ formattedDecimalValue(data.item.profitLoss) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, data.item.profitLoss) }}
         </div></template
       >
       <template v-slot:head(goalsScored)="">
@@ -332,17 +333,14 @@
 
 <script>
 import { showError } from "@/global";
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
 
 export default {
-  props: [
-    "bets",
-    "methods",
-    "leagues",
-    "getDateFormatted",
-    "formattedDecimalValue",
-    "loadingImport",
-  ],
+  mixins: [mixin],
+  props: ["bets", "methods", "leagues", "getDateFormatted", "loadingImport"],
   computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
     rows() {
       return this.toImportBets.length;
     },
@@ -558,9 +556,12 @@ export default {
     },
     getStakeValue(bet) {
       if (bet.stake) {
-        return "$ " + this.formattedDecimalValue(bet.stake);
+        return `${this.moneySymbol} ${this.formatDecimal(
+          this.decimalType,
+          bet.stake
+        )}`;
       } else {
-        return "$ 0.00";
+        return `${this.moneySymbol} ${this.formatDecimal(this.decimalType, 0)}`;
       }
     },
     getGoalsScored(bet) {

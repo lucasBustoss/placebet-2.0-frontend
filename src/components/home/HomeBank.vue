@@ -13,37 +13,42 @@
       </template>
       <template #cell(initialBank)="props"
         ><div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.startBank) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, props.item.startBank) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(profitLoss)="props">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.profitLoss) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, props.item.profitLoss) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(withdraw)="props">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.bankWithdraws) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, props.item.bankWithdraws) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(deposit)="props"
         ><div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.bankDeposits) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, props.item.bankDeposits) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(finalBank)="props"
         ><div v-if="showResults">
-          $ {{ formattedDecimalValue(props.item.finalBank) }}
+          {{ moneySymbol }}
+          {{ formatDecimal(decimalType, props.item.finalBank) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(roi)="props"
         ><div v-if="showResults">
-          {{ formattedDecimalValue(props.item.roi) }}%
+          {{ formatDecimal(decimalType, props.item.roi) }}%
         </div>
         <div v-else>-</div>
       </template>
@@ -52,8 +57,11 @@
 </template>
 
 <script>
+import { mixin } from "@/mixins";
+
 export default {
-  props: ["bankStats", "formattedDecimalValue", "showResults"],
+  mixins: [mixin],
+  props: ["bankStats", "decimalType", "moneySymbol", "showResults"],
   data() {
     return {
       resultFields: [

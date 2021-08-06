@@ -48,12 +48,14 @@
     <div class="home-lists">
       <HomeBank
         :bankStats="bankStats"
-        :formattedDecimalValue="formattedDecimalValue"
+        :decimalType="decimalType"
+        :moneySymbol="moneySymbol"
         :showResults="showResults"
       />
       <HomeBetfair
         :betfairStats="betfairStats"
-        :formattedDecimalValue="formattedDecimalValue"
+        :decimalType="decimalType"
+        :moneySymbol="moneySymbol"
         :showResults="showResults"
       />
     </div>
@@ -61,6 +63,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import HomeBank from "./HomeBank";
 import HomeBetfair from "./HomeBetfair";
 import CardInfo from "../template/CardInfo";
@@ -73,6 +77,10 @@ import api from "@/config/api";
 export default {
   components: { HomeBank, HomeBetfair, CardInfo },
   computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
+    // decimalType() {
+    //   return this.$store.state.money;
+    // },
     actualBankStats() {
       const actual = this.bankStats.filter(
         (bs) => bs.month === format(new Date(), "MM-yyyy")
@@ -92,7 +100,9 @@ export default {
     return {
       bankStats: [],
       betfairStats: [],
-      showResults: false,
+      showResults: this.$store.state.defaultVisibility
+        ? this.$store.state.defaultVisibility
+        : 0,
       isLoading: false,
     };
   },
@@ -133,10 +143,6 @@ export default {
         );
         return;
       }
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
   },
   async mounted() {

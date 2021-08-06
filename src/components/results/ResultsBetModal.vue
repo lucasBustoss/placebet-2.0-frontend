@@ -36,7 +36,7 @@
         </b-form-group>
 
         <b-form-group
-          label="Stake ($)"
+          :label="'Stake (' + moneySymbol + ')'"
           label-for="input-stake"
           class="mb-0 modalbet-goals"
         >
@@ -51,7 +51,7 @@
           <b-form-input
             disabled
             id="input-profitloss"
-            :value="'$ ' + formattedDecimalValue(bet.profitLoss)"
+            :value="moneySymbol + formatDecimal(decimalType, bet.profitLoss)"
           ></b-form-input>
         </b-form-group>
 
@@ -63,7 +63,7 @@
           <b-form-input
             disabled
             id="input-roi"
-            :value="formattedDecimalValue(bet.roi) + '%'"
+            :value="formatDecimal(decimalType, bet.roi) + '%'"
           ></b-form-input>
         </b-form-group>
       </div>
@@ -145,10 +145,14 @@
 import { format, parseISO } from "date-fns";
 
 import { showError } from "@/global";
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
 
 export default {
-  props: ["bet", "methods", "leagues", "formattedDecimalValue"],
+  mixins: [mixin],
+  props: ["bet", "methods", "leagues"],
   computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
     getMethodNames() {
       return this.methods.map((m) => m.name);
     },

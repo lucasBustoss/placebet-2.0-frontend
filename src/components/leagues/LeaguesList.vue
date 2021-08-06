@@ -6,16 +6,17 @@
       <template #cell(greens)="data">{{ data.item.greens }}</template>
       <template #cell(reds)="data"> {{ data.item.reds }}</template>
       <template #cell(result)="data">
-        $ {{ formattedDecimalValue(data.item.result) }}</template
+        {{ moneySymbol }}
+        {{ formatDecimal(decimalType, data.item.result) }}</template
       >
       <template #cell(roi)="data"
-        >{{ formattedDecimalValue(data.item.roi) }}%</template
+        >{{ formatDecimal(decimalType, data.item.roi) }}%</template
       >
       <template #cell(greenPercent)="data"
-        >{{ formattedDecimalValue(data.item.greenPercent) }}%</template
+        >{{ formatDecimal(decimalType, data.item.greenPercent) }}%</template
       >
       <template #cell(redPercent)="data"
-        >{{ formattedDecimalValue(data.item.redPercent) }}%</template
+        >{{ formatDecimal(decimalType, data.item.redPercent) }}%</template
       >
       <template #cell(delete)="data">
         <div>
@@ -39,12 +40,19 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
+
 import LeaguesListInsertModal from "./LeaguesListInsertModal";
 import LeaguesDeleteModal from "./LeaguesDeleteModal";
 
 export default {
+  mixins: [mixin],
   props: ["leagues"],
   components: { LeaguesListInsertModal, LeaguesDeleteModal },
+  computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
+  },
   data() {
     return {
       fields: [
@@ -102,10 +110,6 @@ export default {
     },
     deleteLeague() {
       this.$emit("deleteLeague", this.league.id);
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
   },
 };

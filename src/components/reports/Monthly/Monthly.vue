@@ -219,7 +219,9 @@ export default {
     return {
       selectedMonth: format(startOfMonth(new Date()), "yyyy-MM-dd"),
       isLoading: true,
-      showResults: false,
+      showResults: this.$store.state.defaultVisibility
+        ? this.$store.state.defaultVisibility
+        : 0,
       results: [],
       stats: null,
       monthly: null,

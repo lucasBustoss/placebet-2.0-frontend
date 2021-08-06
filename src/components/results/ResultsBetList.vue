@@ -23,14 +23,15 @@
       <template #cell(method)="data">{{ data.item.method }}</template>
       <template #cell(stake)="data">
         <div v-if="showResults">
-          $ {{ formattedDecimalValue(data.item.stake) }}
+          {{ moneySymbol }} {{ formatDecimal(decimalType, data.item.stake) }}
         </div>
         <div v-else>-</div>
       </template>
       <template #cell(profitLoss)="data">
         <div :class="'result-table-value ' + getClassByResult(data.item.roi)">
           <div v-if="showResults">
-            $ {{ formattedDecimalValue(data.item.profitLoss) }}
+            {{ moneySymbol }}
+            {{ formatDecimal(decimalType, data.item.profitLoss) }}
           </div>
           <div v-else>-</div>
         </div>
@@ -38,7 +39,7 @@
       <template #cell(roi)="data"
         ><div :class="'result-table-value ' + getClassByResult(data.item.roi)">
           <div v-if="showResults">
-            {{ formattedDecimalValue(data.item.roi) }}%
+            {{ formatDecimal(decimalType, data.item.roi) }}%
           </div>
           <div v-else>-</div>
         </div>
@@ -71,7 +72,6 @@
     <template v-if="toggleEdit">
       <ResultsBetModal
         :bet="bet"
-        :formattedDecimalValue="formattedDecimalValue"
         :methods="methods"
         :leagues="leagues"
         @updateBet="updateBet"
@@ -97,18 +97,15 @@
 import ResultsBetModal from "./ResultsBetModal";
 import ResultsConfirmModal from "./ResultsConfirmModal";
 import { format, parseISO, addHours } from "date-fns";
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
 
 export default {
-  props: [
-    "showResults",
-    "bets",
-    "methods",
-    "leagues",
-    "loadingBets",
-    "formattedDecimalValue",
-  ],
+  mixins: [mixin],
+  props: ["showResults", "bets", "methods", "leagues", "loadingBets"],
   components: { ResultsBetModal, ResultsConfirmModal },
   computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
     rows() {
       return this.bets.length;
     },

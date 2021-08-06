@@ -6,16 +6,17 @@
       <template #cell(greens)="data">{{ data.item.greens }}</template>
       <template #cell(reds)="data"> {{ data.item.reds }}</template>
       <template #cell(result)="data">
-        $ {{ formattedDecimalValue(data.item.result) }}</template
+        {{ moneySymbol }}
+        {{ formatDecimal(decimalType, data.item.result) }}</template
       >
       <template #cell(roi)="data"
-        >{{ formattedDecimalValue(data.item.roi) }}%</template
+        >{{ formatDecimal(decimalType, data.item.roi) }}%</template
       >
       <template #cell(greenPercent)="data"
-        >{{ formattedDecimalValue(data.item.greenPercent) }}%</template
+        >{{ formatDecimal(decimalType, data.item.greenPercent) }}%</template
       >
       <template #cell(redPercent)="data"
-        >{{ formattedDecimalValue(data.item.redPercent) }}%</template
+        >{{ formatDecimal(decimalType, data.item.redPercent) }}%</template
       >
       <template #cell(delete)="data">
         <div>
@@ -39,11 +40,18 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
+
 import MethodsListInsertModal from "./MethodsListInsertModal";
 import MethodsDeleteModal from "./MethodsDeleteModal";
 
 export default {
+  mixins: [mixin],
   props: ["methods"],
+  computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
+  },
   components: { MethodsListInsertModal, MethodsDeleteModal },
   data() {
     return {
@@ -102,10 +110,6 @@ export default {
     },
     deleteMethod() {
       this.$emit("deleteMethod", this.method.id);
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
   },
 };

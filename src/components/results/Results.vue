@@ -84,7 +84,6 @@
         :methods="methods"
         :leagues="leagues"
         :loadingBets="loadingBets"
-        :formattedDecimalValue="formattedDecimalValue"
         @importBets="importBets"
         @getBets="getBets"
         @updateBet="updateBet"
@@ -130,10 +129,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setBetsToImport"]),
-    teste() {
-      console.log(this.showResults);
-      console.log(this.$store.state.defaultVisibility);
-    },
+    teste() {},
     async loadInfos() {
       this.loadMethods();
       this.loadLeagues();
@@ -272,11 +268,6 @@ export default {
       } catch (err) {
         showError(err);
       }
-    },
-
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
     async changeMonth(value) {
       this.selectedMonth = format(value, "yyyy-MM-dd");

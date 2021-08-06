@@ -14,10 +14,10 @@
         <div v-if="!isLoading">
           <div v-if="shouldNotShowResults">--</div>
           <div v-else>
-            {{ useMoneySymbol ? "$" : "" }}
+            {{ useMoneySymbol ? this.moneySymbol : "" }}
             {{
               useFormattedDecimalValue
-                ? formattedDecimalValue(infoNumber)
+                ? formatDecimal(decimalType, infoNumber)
                 : infoNumber
             }}
             {{ usePercentageSymbol ? "%" : "" }}
@@ -33,7 +33,11 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mixin } from "@/mixins";
+
 export default {
+  mixins: [mixin],
   props: [
     "isLoading",
     "infoNumber",
@@ -46,6 +50,7 @@ export default {
     "showResults",
   ],
   computed: {
+    ...mapGetters(["moneySymbol", "decimalType"]),
     shouldNotShowResults() {
       return (
         !this.showResults &&
@@ -67,10 +72,6 @@ export default {
       }
 
       return "";
-    },
-    formattedDecimalValue(value) {
-      const numberValue = Number(value);
-      return numberValue.toFixed(2);
     },
   },
 };
