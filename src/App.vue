@@ -50,6 +50,8 @@ export default {
 
       const res = await api.post("/sessions/validate", userData);
 
+      console.log(res.data);
+
       if (res.data && res.data.message) {
         this.setHeaders(userData);
 
