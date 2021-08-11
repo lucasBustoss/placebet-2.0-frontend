@@ -40,12 +40,15 @@ export default {
 
       const json = localStorage.getItem(userKey);
       const userData = JSON.parse(json);
-      this.$store.commit("setUser", userData.user);
 
       if (!userData) {
         this.validatingToken = false;
         this.$router.push({ name: "auth" }).catch(() => {});
         return;
+      }
+
+      if (userData.user) {
+        this.$store.commit("setUser", userData.user);
       }
 
       const res = await api.post("/sessions/validate", userData);
