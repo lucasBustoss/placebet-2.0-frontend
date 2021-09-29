@@ -35,7 +35,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUserId"]),
+    ...mapMutations(["setUser"]),
     cancelCreate() {
       localStorage.removeItem(userKey);
       this.$store.commit("setUser", null);

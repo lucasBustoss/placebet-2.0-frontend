@@ -129,7 +129,6 @@ export default {
   },
   methods: {
     ...mapMutations(["setBetsToImport"]),
-    teste() {},
     async loadInfos() {
       this.loadMethods();
       this.loadLeagues();
