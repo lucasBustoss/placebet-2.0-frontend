@@ -33,9 +33,9 @@ export default {
     async loadMethods() {
       try {
         const response = await api.get("/methods/stats", {
-          params: {
-            date: this.selectedMonth,
-          },
+          // params: {
+          //   date: this.selectedMonth,
+          // },
         });
 
         if (response && response.data) {
