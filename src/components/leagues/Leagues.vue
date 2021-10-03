@@ -33,9 +33,9 @@ export default {
     async loadLeagues() {
       try {
         const response = await api.get("/leagues/stats", {
-          params: {
-            date: this.selectedMonth,
-          },
+          // params: {
+          //   date: this.selectedMonth,
+          // },
         });
 
         if (response && response.data) {
